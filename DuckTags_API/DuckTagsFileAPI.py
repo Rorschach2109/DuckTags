@@ -10,3 +10,6 @@ class DuckTagsFileAPI(object):
 
     def get_music_files_from_files_dict(self, files_dict, music_extensions_list):
         return self.file_manager.get_music_files_from_files_dict(files_dict, music_extensions_list)
+
+    def get_current_directory(self):
+        return self.file_manager.get_current_directory()

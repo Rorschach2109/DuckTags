@@ -57,7 +57,7 @@ class DuckTagsFileAPITestCase(unittest.TestCase):
     def test_get_files_dict_current_path(self):
         self.file_api.get_files_dict_from_folder(self.folder_path)
 
-        current_folder_path = self.file_manager.current_folder_path
+        current_folder_path = self.file_api.get_current_directory()
 
         self.assertEqual(self.folder_path, current_folder_path)
 

@@ -28,3 +28,6 @@ class DuckTagsFileManager(object):
             )
 
         return music_files_dict
+
+    def get_current_directory(self):
+        return self.current_folder_path
