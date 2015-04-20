@@ -1,4 +1,5 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
+from Test.Utils.DuckTagsTestMp3Tags import DuckTagsTestMp3Tags
 
 import unittest
 import mock
@@ -31,3 +32,43 @@ class DuckTagsMetadataAPITestCase(unittest.TestCase):
         self.metadata_api.get_music_file_metadata(self.mp3_file_path)
 
         mock_mutagen.assert_called_with(self.mp3_file_path)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_get_metadata_mp3_valid_tags(self, mock_mutagen):
+        mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags
+
+        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+
+        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags, current_tags)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_get_metadata_mp3_valid_tags_no_title(self, mock_mutagen):
+        mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags_no_title
+
+        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+
+        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags_no_title, current_tags)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_get_metadata_mp3_valid_tags_no_album(self, mock_mutagen):
+        mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags_no_album
+
+        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+
+        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags_no_album, current_tags)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_get_metadata_mp3_valid_tags_no_genre(self, mock_mutagen):
+        mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags_no_genre
+
+        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+
+        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags_no_genre, current_tags)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_get_metadata_mp3_valid_tags_no_date(self, mock_mutagen):
+        mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags_no_date
+
+        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+
+        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags_no_date, current_tags)
