@@ -13,33 +13,15 @@ class DuckTagsMp3MetadataManager(object):
             return {}
 
         metadata_tags = dict()
-        metadata_tags[u'title'] = self.__get_metadata_title__()
-        metadata_tags[u'album'] = self.__get_metadata_album__()
-        metadata_tags[u'genre'] = self.__get_metadata_genre__()
-        metadata_tags[u'date'] = self.__get_metadata_date__()
+        metadata_tags[u'title'] = self.__get_metadata_field__('title')
+        metadata_tags[u'album'] = self.__get_metadata_field__('album')
+        metadata_tags[u'genre'] = self.__get_metadata_field__('genre')
+        metadata_tags[u'date'] = self.__get_metadata_field__('date')
 
         return metadata_tags
 
-    def __get_metadata_title__(self):
+    def __get_metadata_field__(self, metadata_field_name):
         try:
-            return self.audio['title'][0]
-        except KeyError:
-            return u''
-
-    def __get_metadata_album__(self):
-        try:
-            return self.audio['album'][0]
-        except KeyError:
-            return u''
-
-    def __get_metadata_genre__(self):
-        try:
-            return self.audio['genre'][0]
-        except KeyError:
-            return u''
-
-    def __get_metadata_date__(self):
-        try:
-            return self.audio['date'][0]
+            return self.audio[metadata_field_name][0]
         except KeyError:
             return u''
