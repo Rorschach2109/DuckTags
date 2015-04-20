@@ -12,12 +12,19 @@ class DuckTagsMetadataAPITestCase(unittest.TestCase):
         self.metadata_manager = self.metadata_api.metadata_manager
 
         self.mp3_file_path = 'folder/file_name.mp3'
+        self.mp3_file_path_upper = 'folder/file_name.MP3'
         self.mp3_manager_index = 0
 
         self.invalid_music_file_name = 'file_name.xxx'
 
     def test_get_metadata_mp3_manager_index(self):
         self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+
+        current_manager_index = self.metadata_manager.metadata_manager_index
+        self.assertEqual(self.mp3_manager_index, current_manager_index)
+
+    def test_get_metadata_MP3_manager_index(self):
+        self.metadata_api.get_music_file_metadata(self.mp3_file_path_upper)
 
         current_manager_index = self.metadata_manager.metadata_manager_index
         self.assertEqual(self.mp3_manager_index, current_manager_index)
