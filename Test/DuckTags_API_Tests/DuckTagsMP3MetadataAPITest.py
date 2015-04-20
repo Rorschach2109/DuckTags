@@ -7,18 +7,19 @@ import mock
 
 class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
 
-    def setUp(self):
-        self.metadata_api = DuckTagsMetadataAPI()
-        self.metadata_manager = self.metadata_api.metadata_manager
+    @classmethod
+    def setUpClass(cls):
+        cls.metadata_api = DuckTagsMetadataAPI()
+        cls.metadata_manager = cls.metadata_api.metadata_manager
 
-        self.mp3_file_path = 'folder/file_name.mp3'
-        self.mp3_files_paths_list = ['file_name.mp3', 'file_name.mp3', 'file_name.mp3']
+        cls.mp3_file_path = 'folder/file_name.mp3'
+        cls.mp3_files_paths_list = ['file_name.mp3', 'file_name.mp3', 'file_name.mp3']
 
-        self.mp3_file_path_upper = 'folder/file_name.MP3'
-        self.mp3_manager_index = 0
+        cls.mp3_file_path_upper = 'folder/file_name.MP3'
+        cls.mp3_manager_index = 0
 
-        self.invalid_music_file_path = 'file_name.xxx'
-        self.invalid_music_files_paths_list = ['file_name.mp3', 'file_name.xxx']
+        cls.invalid_music_file_path = 'file_name.xxx'
+        cls.invalid_music_files_paths_list = ['file_name.mp3', 'file_name.xxx']
 
     def test_get_metadata_mp3_manager_index(self):
         self.metadata_api.get_music_file_metadata(self.mp3_file_path)
