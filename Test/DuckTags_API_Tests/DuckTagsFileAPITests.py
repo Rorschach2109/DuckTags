@@ -6,31 +6,32 @@ import mock
 
 class DuckTagsFileAPITestCase(unittest.TestCase):
 
-    def setUp(self):
-        self.file_api = DuckTagsFileAPI()
-        self.file_manager = self.file_api.file_manager
+    @classmethod
+    def setUpClass(cls):
+        cls.file_api = DuckTagsFileAPI()
+        cls.file_manager = cls.file_api.file_manager
 
-        self.music_extensions_list = ['mp3', 'wav', 'ogg']
-        self.doubled_music_extensions_list = ['mp3', 'wav', 'ogg', 'wav', 'ogg', 'mp3']
-        self.empty_music_extensions_list = []
+        cls.music_extensions_list = ['mp3', 'wav', 'ogg']
+        cls.doubled_music_extensions_list = ['mp3', 'wav', 'ogg', 'wav', 'ogg', 'mp3']
+        cls.empty_music_extensions_list = []
 
-        self.folder_path = 'folder_path'
+        cls.folder_path = 'folder_path'
 
-        self.files_dict = {
+        cls.files_dict = {
             'folder_path_1': ['1.mp3', '2.jpg', '3.ogg'],
             'folder_path_2': [],
             'folder_path_3': ['1.jpg', '2.bmp', '3.txt'],
             'folder_path_4': ['1.doc', '2.mp3', '3.ogg', '4.wav']
         }
 
-        self.music_files_dict = {
+        cls.music_files_dict = {
             'folder_path_1': ['1.mp3', '3.ogg'],
             'folder_path_2': [],
             'folder_path_3': [],
             'folder_path_4': ['2.mp3', '3.ogg', '4.wav']
         }
 
-        self.empty_music_files_dict = {
+        cls.empty_music_files_dict = {
             'folder_path_1': [],
             'folder_path_2': [],
             'folder_path_3': [],
