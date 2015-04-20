@@ -10,7 +10,7 @@ class DuckTagsMp3MetadataManager(object):
         try:
             self.audio = EasyID3(music_file_name)
         except Exception:
-            return {}
+            return dict()
 
         metadata_tags = dict()
         metadata_tags[u'title'] = self.__get_metadata_field__('title')
