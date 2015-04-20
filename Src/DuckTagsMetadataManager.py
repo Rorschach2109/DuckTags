@@ -34,9 +34,11 @@ class DuckTagsMetadataManager(object):
     @music_type_decorator
     def get_music_file_metadata(self, music_file_path):
         try:
-            return self.metadata_managers_list[self.metadata_manager_index].get_music_file_metadata(music_file_path)
+            metadata_manager = self.metadata_managers_list[self.metadata_manager_index]
         except IndexError:
             raise
+        else:
+            return metadata_manager.get_music_file_metadata(music_file_path)
 
     def get_music_files_list_metadata(self, music_files_paths_list):
         pass
