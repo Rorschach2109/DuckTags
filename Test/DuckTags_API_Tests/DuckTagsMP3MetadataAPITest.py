@@ -1,5 +1,6 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
 from Test.Utils.DuckTagsTestMp3Tags import DuckTagsTestMp3Tags
+from Test.Utils.DuckTagsTestMp3Mocks import DuckTagsMP3AudioMock
 
 import unittest
 import mock
@@ -140,3 +141,70 @@ class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
         current_tags = self.metadata_api.get_music_files_list_metadata(self.mp3_files_paths_list)
 
         self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_multi_values_files_tags, current_tags)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_set_metadata_mp3_manager_index(self, mock_mutagen):
+        mock_mutagen.return_value = DuckTagsMP3AudioMock()
+
+        self.metadata_api.set_music_file_metadata(self.mp3_file_path, DuckTagsTestMp3Tags.valid_mp3_different_tags)
+
+        current_manager_index = self.metadata_manager.metadata_manager_index
+
+        self.assertEqual(self.mp3_manager_index, current_manager_index)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_set_metadata_mp3_invalid_music_extension(self, mock_mutagen):
+        mp3_audio_mock = DuckTagsMP3AudioMock()
+        mock_mutagen.return_value = mp3_audio_mock
+
+        self.metadata_api.set_music_file_metadata(self.invalid_music_file_path,
+                                                  DuckTagsTestMp3Tags.valid_mp3_different_tags)
+
+        self.assertRaises(TypeError)
+        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags, mp3_audio_mock.get_tags_dict())
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_set_metadata_mp3_valid_music_extension(self, mock_mutagen):
+        mp3_audio_mock = DuckTagsMP3AudioMock()
+        mock_mutagen.return_value = mp3_audio_mock
+
+        self.metadata_api.set_music_file_metadata(self.mp3_file_path,
+                                                  DuckTagsTestMp3Tags.valid_mp3_different_tags)
+
+        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_different_tags, mp3_audio_mock.get_tags_dict())
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_set_metadata_mp3_empty_tags_dict(self, mock_mutagen):
+        mp3_audio_mock = DuckTagsMP3AudioMock()
+        mock_mutagen.return_value = mp3_audio_mock
+
+        self.metadata_api.set_music_file_metadata(self.mp3_file_path,
+                                                  DuckTagsTestMp3Tags.invalid_mp3_empty_tags)
+
+        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags, mp3_audio_mock.get_tags_dict())
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_set_metadata_mp3_mutagen_exception(self, mock_mutagen):
+        mock_mutagen.side_effect = Exception
+
+        self.metadata_api.set_music_file_metadata(self.mp3_file_path,
+                                                  DuckTagsTestMp3Tags.invalid_mp3_empty_tags)
+
+        self.assertRaises(Exception())
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_set_metadata_list_mp3_manager_index(self, mock_mutagen):
+        mock_mutagen.return_value = DuckTagsMP3AudioMock()
+
+        self.metadata_api.set_music_file_list_metadata(self.mp3_files_paths_list, DuckTagsTestMp3Tags.valid_mp3_tags)
+
+        current_manager_index = self.metadata_manager.metadata_manager_index
+        self.assertEqual(self.mp3_manager_index, current_manager_index)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_set_metadata_mp3_list_invalid_music_extension(self, mock_mutagen):
+        mock_mutagen.return_value = DuckTagsMP3AudioMock()
+
+        self.metadata_api.set_music_file_list_metadata(self.invalid_music_files_paths_list,
+                                                       DuckTagsTestMp3Tags.valid_mp3_tags)
+        self.assertRaises(TypeError)

@@ -24,6 +24,15 @@ class DuckTagsTestMp3Tags(object):
         'date': []
     }
 
+    invalid_mp3_empty_tags = {}
+
+    valid_mp3_empty_tags = {
+        'title': u'',
+        'album': u'',
+        'genre': u'',
+        'date': u''
+    }
+
     valid_mp3_tags = {
         'title': u'title',
         'album': u'album',
@@ -95,4 +104,11 @@ class DuckTagsTestMp3Tags(object):
         'album': u'album',
         'genre': u'genre',
         'date': u''
+    }
+
+    valid_mp3_different_tags = {
+        'title': u'another_title',
+        'album': u'another_album',
+        'genre': u'another_genre',
+        'date': u'another_date'
     }

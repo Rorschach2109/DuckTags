@@ -77,3 +77,12 @@ class DuckTagsMetadataManager(object):
             pass
         else:
             return metadata_manager.set_music_file_metadata(music_file_path, music_metadata_dict)
+
+    @music_files_list_type
+    def set_music_file_list_metadata(self, music_files_paths_list, music_metadata_dict):
+        try:
+            metadata_manager = self.metadata_managers_list[self.metadata_manager_index]
+        except TypeError:
+            pass
+        else:
+            return metadata_manager.set_music_file_list_metadata(music_files_paths_list, music_metadata_dict)

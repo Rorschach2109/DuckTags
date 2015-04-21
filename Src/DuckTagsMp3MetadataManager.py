@@ -7,6 +7,10 @@ class DuckTagsMp3MetadataManager(object):
 
     def __init__(self):
         self.audio = None
+        self.title_tag = u'title'
+        self.album_tag = u'album'
+        self.genre_tag = u'genre'
+        self.date_tag = u'date'
 
     def __get_metadata_field__(self, metadata_field_name):
         try:
@@ -21,10 +25,10 @@ class DuckTagsMp3MetadataManager(object):
             pass
 
         metadata_tags = dict()
-        metadata_tags[u'title'] = self.__get_metadata_field__('title')
-        metadata_tags[u'album'] = self.__get_metadata_field__('album')
-        metadata_tags[u'genre'] = self.__get_metadata_field__('genre')
-        metadata_tags[u'date'] = self.__get_metadata_field__('date')
+        metadata_tags[self.title_tag] = self.__get_metadata_field__('title')
+        metadata_tags[self.album_tag] = self.__get_metadata_field__('album')
+        metadata_tags[self.genre_tag] = self.__get_metadata_field__('genre')
+        metadata_tags[self.date_tag] = self.__get_metadata_field__('date')
 
         return metadata_tags
 
@@ -38,18 +42,36 @@ class DuckTagsMp3MetadataManager(object):
         for music_file_path in music_files_paths_list:
             file_metadata_tags = self.get_music_file_metadata(music_file_path)
 
-            title_set.add(file_metadata_tags.get(u'title', u''))
-            album_set.add(file_metadata_tags.get(u'album', u''))
-            genre_set.add(file_metadata_tags.get(u'genre', u''))
-            date_set.add(file_metadata_tags.get(u'date', u''))
+            title_set.add(file_metadata_tags.get(self.title_tag, u''))
+            album_set.add(file_metadata_tags.get(self.album_tag, u''))
+            genre_set.add(file_metadata_tags.get(self.genre_tag, u''))
+            date_set.add(file_metadata_tags.get(self.date_tag, u''))
 
         metadata_tags = dict()
-        metadata_tags[u'title'] = title_set.pop() if len(title_set) == 1 else self.multiple_values_message
-        metadata_tags[u'album'] = album_set.pop() if len(album_set) == 1 else self.multiple_values_message
-        metadata_tags[u'genre'] = genre_set.pop() if len(genre_set) == 1 else self.multiple_values_message
-        metadata_tags[u'date'] = date_set.pop() if len(date_set) == 1 else self.multiple_values_message
+        metadata_tags[self.title_tag] = title_set.pop() if len(title_set) == 1 else self.multiple_values_message
+        metadata_tags[self.album_tag] = album_set.pop() if len(album_set) == 1 else self.multiple_values_message
+        metadata_tags[self.genre_tag] = genre_set.pop() if len(genre_set) == 1 else self.multiple_values_message
+        metadata_tags[self.date_tag] = date_set.pop() if len(date_set) == 1 else self.multiple_values_message
 
         return metadata_tags
 
     def set_music_file_metadata(self, music_file_path, music_metadata_dict):
-        pass
+        try:
+            self.audio = EasyID3(music_file_path)
+        except Exception:
+            pass
+        else:
+            self.audio[self.title_tag] = music_metadata_dict.get(self.title_tag,
+                                                                 self.__get_metadata_field__(self.title_tag))
+            self.audio[self.album_tag] = music_metadata_dict.get(self.album_tag,
+                                                                 self.__get_metadata_field__(self.album_tag))
+            self.audio[self.genre_tag] = music_metadata_dict.get(self.genre_tag,
+                                                                 self.__get_metadata_field__(self.genre_tag))
+            self.audio[self.date_tag] = music_metadata_dict.get(self.date_tag,
+                                                                self.__get_metadata_field__(self.date_tag))
+
+            self.audio.save()
+
+    def set_music_file_list_metadata(self, music_files_paths_list, music_metadata_dict):
+        for music_file_path in music_files_paths_list:
+            self.set_music_file_metadata(music_file_path, music_metadata_dict)
