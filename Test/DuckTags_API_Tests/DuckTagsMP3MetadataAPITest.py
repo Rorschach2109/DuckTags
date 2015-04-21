@@ -1,6 +1,6 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
-from Test.Utils.DuckTagsTestMp3Tags import DuckTagsTestMp3Tags
-from Test.Utils.DuckTagsTestMp3Mocks import DuckTagsMP3AudioMock
+from Test.TestUtils.DuckTagsTestMp3Tags import DuckTagsTestMp3Tags
+from Test.TestUtils.DuckTagsTestMp3Mocks import DuckTagsMP3AudioMock
 
 import unittest
 import mock
