@@ -61,3 +61,18 @@ class DuckTagsFolderStructureManagerTestCase(unittest.TestCase):
                               self.test_mp3_tags.valid_mp3_second_mutagen_tags['title'][0])
 
         self.assertEqual(expected_file_name, current_file_name)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    def test_convert_file_name_with_pattern_2(self, mock_mutagen):
+        self.folder_structure_manager.file_name = self.file_name
+
+        mock_mutagen.return_value = self.test_mp3_tags.valid_mp3_second_mutagen_tags
+
+        self.folder_structure_manager.__convert_file_name_with_pattern__(self.file_path, 1)
+
+        current_file_name = self.folder_structure_manager.file_name
+        expected_file_name = '%s. %s' % \
+                             (self.test_mp3_tags.valid_mp3_second_mutagen_tags['tracknumber'][0],
+                              self.test_mp3_tags.valid_mp3_second_mutagen_tags['title'][0])
+
+        self.assertEqual(expected_file_name, current_file_name)
