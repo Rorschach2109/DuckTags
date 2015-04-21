@@ -11,14 +11,14 @@ class DuckTagsMp3MetadataManager(object):
     def __get_metadata_field__(self, metadata_field_name):
         try:
             return self.audio[metadata_field_name][0]
-        except (KeyError, IndexError):
+        except (KeyError, IndexError, TypeError):
             return u''
 
     def get_music_file_metadata(self, music_file_path):
         try:
             self.audio = EasyID3(music_file_path)
         except Exception:
-            return dict()
+            pass
 
         metadata_tags = dict()
         metadata_tags[u'title'] = self.__get_metadata_field__('title')
@@ -36,15 +36,12 @@ class DuckTagsMp3MetadataManager(object):
         date_set = set()
 
         for music_file_path in music_files_paths_list:
-            try:
-                self.audio = EasyID3(music_file_path)
-            except Exception:
-                continue
+            file_metadata_tags = self.get_music_file_metadata(music_file_path)
 
-            title_set.add(self.__get_metadata_field__('title'))
-            album_set.add(self.__get_metadata_field__('album'))
-            genre_set.add(self.__get_metadata_field__('genre'))
-            date_set.add(self.__get_metadata_field__('date'))
+            title_set.add(file_metadata_tags.get(u'title', u''))
+            album_set.add(file_metadata_tags.get(u'album', u''))
+            genre_set.add(file_metadata_tags.get(u'genre', u''))
+            date_set.add(file_metadata_tags.get(u'date', u''))
 
         metadata_tags = dict()
         metadata_tags[u'title'] = title_set.pop() if len(title_set) == 1 else self.multiple_values_message
