@@ -14,21 +14,23 @@ def __get_metadata_manager_index__(music_file_path):
     return manager_index
 
 
-def music_file_type(get_metadata_function):
+def music_file_type(metadata_handler_function):
 
-    @functools.wraps(get_metadata_function)
-    def wrapper(instance, music_file_path):
+    @functools.wraps(metadata_handler_function)
+    def wrapper(instance, *args):
+        music_file_path = args[0]
         DuckTagsMetadataManager.metadata_manager_index = __get_metadata_manager_index__(music_file_path)
-        return get_metadata_function(instance, music_file_path)
+        return metadata_handler_function(instance, *args)
 
     return wrapper
 
 
-def music_files_list_type(get_metadata_function):
+def music_files_list_type(metadata_handler_function):
 
-    @functools.wraps(get_metadata_function)
-    def wrapper(instance, music_files_paths_list):
+    @functools.wraps(metadata_handler_function)
+    def wrapper(instance, *args):
         music_file_type_set = set()
+        music_files_paths_list = args[0]
         for music_file_path in music_files_paths_list:
             music_file_type_set.add(__get_metadata_manager_index__(music_file_path))
 
@@ -37,7 +39,7 @@ def music_files_list_type(get_metadata_function):
         else:
             DuckTagsMetadataManager.metadata_manager_index = None
 
-        return get_metadata_function(instance, music_files_paths_list)
+        return metadata_handler_function(instance, *args)
 
     return wrapper
 
@@ -66,3 +68,4 @@ class DuckTagsMetadataManager(object):
             pass
         else:
             return metadata_manager.get_music_files_list_metadata(music_files_paths_list)
+
