@@ -34,9 +34,10 @@ class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
         self.assertEqual(self.mp3_manager_index, current_manager_index)
 
     def test_get_metadata_invalid_music_extension(self):
-        self.metadata_api.get_music_file_metadata(self.invalid_music_file_path)
+        current_metadata = self.metadata_api.get_music_file_metadata(self.invalid_music_file_path)
 
-        self.assertRaises(IndexError)
+        self.assertRaises(TypeError)
+        self.assertIsNone(current_metadata)
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_get_metadata_mp3(self, mock_mutagen):
@@ -91,9 +92,10 @@ class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
         self.assertEqual(self.mp3_manager_index, current_manager_index)
 
     def test_get_metadata_list_invalid_music_extension(self):
-        self.metadata_api.get_music_files_list_metadata(self.invalid_music_files_paths_list)
+        current_metadata = self.metadata_api.get_music_files_list_metadata(self.invalid_music_files_paths_list)
 
-        self.assertRaises(IndexError)
+        self.assertRaises(TypeError)
+        self.assertIsNone(current_metadata)
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_get_metadata_list_mp3(self, mock_mutagen):

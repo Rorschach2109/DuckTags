@@ -9,7 +9,7 @@ def __get_metadata_manager_index__(music_file_path):
     if file_name.endswith('mp3'):
         manager_index = 0
     else:
-        manager_index = -1
+        manager_index = None
 
     return manager_index
 
@@ -35,7 +35,7 @@ def music_files_list_type(get_metadata_function):
         if len(music_file_type_set) == 1:
             DuckTagsMetadataManager.metadata_manager_index = music_file_type_set.pop()
         else:
-            DuckTagsMetadataManager.metadata_manager_index = -1
+            DuckTagsMetadataManager.metadata_manager_index = None
 
         return get_metadata_function(instance, music_files_paths_list)
 
@@ -53,8 +53,8 @@ class DuckTagsMetadataManager(object):
     def get_music_file_metadata(self, music_file_path):
         try:
             metadata_manager = self.metadata_managers_list[self.metadata_manager_index]
-        except IndexError:
-            raise
+        except TypeError:
+            pass
         else:
             return metadata_manager.get_music_file_metadata(music_file_path)
 
@@ -62,7 +62,7 @@ class DuckTagsMetadataManager(object):
     def get_music_files_list_metadata(self, music_files_paths_list):
         try:
             metadata_manager = self.metadata_managers_list[self.metadata_manager_index]
-        except IndexError:
-            raise
+        except TypeError:
+            pass
         else:
             return metadata_manager.get_music_files_list_metadata(music_files_paths_list)
