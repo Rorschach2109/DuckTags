@@ -50,3 +50,6 @@ class DuckTagsMp3MetadataManager(object):
         metadata_tags[u'date'] = date_set.pop() if len(date_set) == 1 else self.multiple_values_message
 
         return metadata_tags
+
+    def set_music_file_metadata(self, music_file_path, music_metadata_dict):
+        pass
