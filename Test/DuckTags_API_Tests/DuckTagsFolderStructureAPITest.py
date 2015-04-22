@@ -21,8 +21,9 @@ class DuckTagsFolderStructureAPITestCase(unittest.TestCase):
 
     def test_get_files_format_patterns(self):
         files_patterns = self.folder_structure_api.get_available_files_format_patterns()
+        available_format_patterns = [format_pattern[0] for format_pattern in self.utils.file_format_patterns]
 
-        self.assertListEqual(self.utils.file_format_patterns, files_patterns)
+        self.assertListEqual(available_format_patterns, files_patterns)
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     @mock.patch('os.path.isfile')

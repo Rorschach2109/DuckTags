@@ -10,7 +10,7 @@ class DuckTagsFolderStructureManager(object):
         self.metadata_api = DuckTagsMetadataAPI()
 
     def get_available_files_format_patterns(self):
-        return self.utils.file_format_patterns
+        return [format_pattern_tuple[0] for format_pattern_tuple in self.utils.file_format_patterns]
 
     def reorganize_files_with_pattern(self, files_paths_list, file_format_pattern_index):
         for file_path in files_paths_list:
@@ -53,9 +53,7 @@ class DuckTagsFolderStructureManager(object):
         track_number = metadata_tags_dict['tracknumber']
         title = metadata_tags_dict['title']
 
-        if file_format_pattern_index == 0:
-            self.file_name = '%s - %s' % (track_number, title)
-        elif file_format_pattern_index == 1:
-            self.file_name = '%s. %s' % (track_number, title)
+        if file_format_pattern_index == 0 or file_format_pattern_index == 1:
+            self.file_name = self.utils.file_format_patterns[file_format_pattern_index][1] % (track_number, title)
 
         return True
