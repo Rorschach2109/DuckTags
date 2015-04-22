@@ -8,11 +8,5 @@ class DuckTagsFolderStructureAPI(object):
     def get_available_files_format_patterns(self):
         return self.folder_structure_manager.get_available_files_format_patterns()
 
-    def get_available_folders_format_patterns(self):
-        return self.folder_structure_manager.get_available_folders_format_patterns()
-
-    def get_preview(self):
-        return self.folder_structure_manager.get_preview()
-
     def reorganize_files_with_pattern(self, files_paths_list, file_format_pattern_index):
         return self.folder_structure_manager.reorganize_files_with_pattern(files_paths_list, file_format_pattern_index)

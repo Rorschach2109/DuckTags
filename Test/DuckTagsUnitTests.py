@@ -3,7 +3,7 @@ import unittest
 import DuckTags_API_Tests.DuckTagsFileAPITests
 import DuckTags_API_Tests.DuckTagsMP3MetadataAPITest
 import DuckTags_API_Tests.DuckTagsFolderStructureAPITest
-import DuckTags_API_Tests.DuckTagsFolderStructureManagerTest
+import Test.DuckTags_Src_Tests.DuckTagsFolderStructureManagerTest
 
 
 if __name__ == '__main__':
@@ -19,7 +19,7 @@ if __name__ == '__main__':
             DuckTags_API_Tests.DuckTagsFolderStructureAPITest.DuckTagsFolderStructureAPITestCase
         ),
         test_loader.loadTestsFromTestCase(
-            DuckTags_API_Tests.DuckTagsFolderStructureManagerTest.DuckTagsFolderStructureManagerTestCase
+            Test.DuckTags_Src_Tests.DuckTagsFolderStructureManagerTest.DuckTagsFolderStructureManagerTestCase
         ),
     ))
 

@@ -39,5 +39,12 @@ class DuckTagsMP3AudioMock(object):
             u'tracknumber': self.track_number[0]
         }
 
+    def clear_tags(self):
+        self.title = []
+        self.album = []
+        self.genre = []
+        self.date = []
+        self.track_number = []
+
     def save(self):
         pass
