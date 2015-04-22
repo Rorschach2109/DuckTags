@@ -27,11 +27,13 @@ class DuckTagsFolderStructureAPITestCase(unittest.TestCase):
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     @mock.patch('os.path.isfile')
+    @mock.patch('os.path.exists')
     @mock.patch('os.rename')
-    def test_reorganize_files_with_pattern_1(self, mock_os_rename, mock_os_isfile, mock_metadata):
+    def test_reorganize_files_with_pattern_1(self, mock_os_rename, mock_os_exists, mock_os_isfile, mock_metadata):
         mp3_audio_mock = DuckTagsMP3AudioMock()
         mock_metadata.return_value = mp3_audio_mock
         mock_os_isfile.return_value = True
+        mock_os_exists.return_value = False
 
         self.folder_structure_api.reorganize_files_with_pattern([self.file_path], 0)
         reorganized_file_path = u'/home/directory/Folder/%s - %s.mp3' % \
@@ -42,11 +44,13 @@ class DuckTagsFolderStructureAPITestCase(unittest.TestCase):
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     @mock.patch('os.path.isfile')
+    @mock.patch('os.path.exists')
     @mock.patch('os.rename')
-    def test_reorganize_files_with_pattern_2(self, mock_os_rename, mock_os_isfile, mock_metadata):
+    def test_reorganize_files_with_pattern_2(self, mock_os_rename, mock_os_exists, mock_os_isfile, mock_metadata):
         mp3_audio_mock = DuckTagsMP3AudioMock()
         mock_metadata.return_value = mp3_audio_mock
         mock_os_isfile.return_value = True
+        mock_os_exists.return_value = False
 
         self.folder_structure_api.reorganize_files_with_pattern([self.file_path], 1)
         reorganized_file_path = u'/home/directory/Folder/%s. %s.mp3' % \
@@ -57,11 +61,14 @@ class DuckTagsFolderStructureAPITestCase(unittest.TestCase):
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     @mock.patch('os.path.isfile')
+    @mock.patch('os.path.exists')
     @mock.patch('os.rename')
-    def test_reorganize_files_with_pattern_false_isfile(self, mock_os_rename, mock_os_isfile, mock_metadata):
+    def test_reorganize_files_with_pattern_path_exists(self, mock_os_rename, mock_os_exists,
+                                                       mock_os_isfile, mock_metadata):
         mp3_audio_mock = DuckTagsMP3AudioMock()
         mock_metadata.return_value = mp3_audio_mock
-        mock_os_isfile.return_value = False
+        mock_os_isfile.return_value = True
+        mock_os_exists.return_value = True
 
         self.folder_structure_api.reorganize_files_with_pattern([self.file_path], 1)
 
@@ -69,11 +76,29 @@ class DuckTagsFolderStructureAPITestCase(unittest.TestCase):
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     @mock.patch('os.path.isfile')
+    @mock.patch('os.path.exists')
     @mock.patch('os.rename')
-    def test_reorganize_files_with_pattern_invalid_pattern_index(self, mock_os_rename, mock_os_isfile, mock_metadata):
+    def test_reorganize_files_with_pattern_false_isfile(self, mock_os_rename, mock_os_exists,
+                                                        mock_os_isfile, mock_metadata):
+        mp3_audio_mock = DuckTagsMP3AudioMock()
+        mock_metadata.return_value = mp3_audio_mock
+        mock_os_isfile.return_value = False
+        mock_os_exists.return_value = False
+
+        self.folder_structure_api.reorganize_files_with_pattern([self.file_path], 1)
+
+        self.assertFalse(mock_os_rename.called)
+
+    @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
+    @mock.patch('os.path.isfile')
+    @mock.patch('os.path.exists')
+    @mock.patch('os.rename')
+    def test_reorganize_files_with_pattern_invalid_pattern_index(self, mock_os_rename, mock_os_exists,
+                                                                 mock_os_isfile, mock_metadata):
         mp3_audio_mock = DuckTagsMP3AudioMock()
         mock_metadata.return_value = mp3_audio_mock
         mock_os_isfile.return_value = True
+        mock_os_exists.return_value = False
 
         self.folder_structure_api.reorganize_files_with_pattern([self.file_path], 10)
 
@@ -81,12 +106,15 @@ class DuckTagsFolderStructureAPITestCase(unittest.TestCase):
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.DuckTagsMp3MetadataManager.get_music_file_metadata')
     @mock.patch('os.path.isfile')
+    @mock.patch('os.path.exists')
     @mock.patch('os.rename')
-    def test_reorganize_files_with_pattern_empty_tags(self, mock_os_rename, mock_os_isfile, mock_metadata):
+    def test_reorganize_files_with_pattern_empty_tags(self, mock_os_rename, mock_os_exists,
+                                                      mock_os_isfile, mock_metadata):
         mp3_audio_mock = DuckTagsMP3AudioMock()
         mp3_audio_mock.clear_tags()
         mock_metadata.return_value = {}
         mock_os_isfile.return_value = True
+        mock_os_exists.return_value = False
 
         self.folder_structure_api.reorganize_files_with_pattern([self.file_path], 1)
 
