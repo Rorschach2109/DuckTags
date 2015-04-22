@@ -22,11 +22,13 @@ class DuckTagsFolderStructureManager(object):
 
         self.__slice_file_path__(file_path)
 
-        if self.__convert_file_name_with_pattern__(file_path, file_format_pattern_index):
-            new_file_path = self.__join_file_path__()
+        if not self.__convert_file_name_with_pattern__(file_path, file_format_pattern_index):
+            return
 
-            if not os.path.exists(new_file_path):
-                os.rename(file_path, new_file_path)
+        new_file_path = self.__join_file_path__()
+
+        if not os.path.exists(new_file_path):
+            os.rename(file_path, new_file_path)
 
     def __slice_file_path__(self, file_path):
         file_path_root_length = file_path.rfind(r'/') + 1
