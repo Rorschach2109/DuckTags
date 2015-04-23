@@ -11,6 +11,7 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
     def setUpClass(cls):
         cls.db_manager = DuckTagsDataBaseManager()
 
+        cls.files_dict_valid = DuckTagsTestDataBaseManagerUtils.files_dict_valid
         cls.music_files_dict_valid = DuckTagsTestDataBaseManagerUtils.music_files_dict_valid
         cls.music_files_dict_empty = DuckTagsTestDataBaseManagerUtils.music_files_dict_empty
         cls.music_files_directories_valid = DuckTagsTestDataBaseManagerUtils.music_files_directories_valid
@@ -20,6 +21,13 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
         cls.valid_second_mp3_tags = DuckTagsTestDataBaseManagerUtils.valid_second_mp3_tags
         cls.first_music_file_model = DuckTagsTestDataBaseManagerUtils.first_music_file_model
         cls.second_music_file_model = DuckTagsTestDataBaseManagerUtils.second_music_file_model
+        cls.music_file_model_no_album = DuckTagsTestDataBaseManagerUtils.music_file_model_no_album
+        cls.first_music_file_model_serialization = \
+            DuckTagsTestDataBaseManagerUtils.first_music_file_model_serialization
+        cls.second_music_file_model_serialization = \
+            DuckTagsTestDataBaseManagerUtils.second_music_file_model_serialization
+        cls.music_file_model_serialization_no_album = \
+            DuckTagsTestDataBaseManagerUtils.music_file_model_serialization_no_album
 
     def test_get_music_file_path_valid(self):
         music_files_directories = list(DuckTagsDataBaseManager.__get_music_file_path__(self.music_files_dict_valid))
@@ -39,15 +47,19 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
 
         self.assertFalse(mock_db_insert.called)
 
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.add_index')
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.create')
     @mock.patch('Src.DuckTagsDataBaseManager.Database.get')
     @mock.patch('DuckTags_API.DuckTagsMetadataAPI.DuckTagsMetadataAPI')
-    def test_insert_music_file(self, mock_metadata_api, mock_db_get):
+    def test_insert_music_file(self, mock_metadata_api, mock_db_get, mock_db_create, mock_db_add_index):
         mock_metadata_api.get_music_file_metadata.side_effects = [
             self.valid_first_mp3_tags,
             self.valid_second_mp3_tags,
             ]
 
         mock_db_get.return_value = None
+        mock_db_create.return_value = None
+        mock_db_add_index.return_value = None
         self.db_manager.__insert_music_files_to_db__(self.music_files_dict)
 
         calls = [
@@ -56,3 +68,21 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
         ]
 
         mock_db_get.assert_has_calls(calls)
+
+    @mock.patch('DuckTags_API.DuckTagsFileAPI.DuckTagsFileAPI.get_music_files_from_files_dict')
+    @mock.patch('DuckTags_API.DuckTagsFileAPI.DuckTagsFileAPI.get_files_dict_from_folder')
+    def test_get_music_file_from_folder(self, mock_get_files_dict, mock_get_music_files_dict):
+        mock_get_files_dict.return_value = self.files_dict_valid
+        mock_get_music_files_dict.return_value = self.music_files_dict_valid
+
+        music_files = self.db_manager.__get_music_files_from_folder__(u'')
+
+        self.assertDictEqual(self.music_files_dict_valid, music_files)
+
+    def test_music_file_serialization(self):
+        serialization_data = self.first_music_file_model.serialize()
+        self.assertDictEqual(self.first_music_file_model_serialization, serialization_data)
+
+    def test_music_file_serialization_no_album(self):
+        serialization_data = self.music_file_model_no_album.serialize()
+        self.assertDictEqual(self.music_file_model_serialization_no_album, serialization_data)

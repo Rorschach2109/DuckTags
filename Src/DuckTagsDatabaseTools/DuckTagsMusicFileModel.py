@@ -7,7 +7,7 @@ class DuckTagsMusicFileModel(object):
         self.album = metadata_tags_dict.get(u'album', u'')
         self.genre = metadata_tags_dict.get(u'genre', u'')
         self.date = metadata_tags_dict.get(u'date', u'')
-        self.track_number = metadata_tags_dict.get(u'tracknumber', u'')
+        self.tracknumber = metadata_tags_dict.get(u'tracknumber', u'')
 
     def serialize(self):
         return self.__dict__
