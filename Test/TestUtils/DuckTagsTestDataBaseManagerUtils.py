@@ -66,13 +66,13 @@ class DuckTagsTestDataBaseManagerUtils(object):
         })
 
     first_music_file_model_serialization = {
-            u'path': u'folder_path_1/artist/1.mp3',
-            u'title': u'first',
-            u'artist': u'artist',
-            u'album': u'album',
-            u'genre': u'genre',
-            u'date': 1990,
-            u'tracknumber': 1
+        u'path': u'folder_path_1/artist/1.mp3',
+        u'title': u'first',
+        u'artist': u'artist',
+        u'album': u'album',
+        u'genre': u'genre',
+        u'date': 1990,
+        u'tracknumber': 1
     }
 
     second_music_file_model = DuckTagsMusicFileModel(
@@ -107,11 +107,11 @@ class DuckTagsTestDataBaseManagerUtils(object):
         })
 
     music_file_model_serialization_no_album = {
-            u'path': u'folder_path_4/artist/2.mp3',
-            u'title': u'second',
-            u'artist': u'artist',
-            u'album': u'',
-            u'genre': u'genre',
-            u'date': 1990,
-            u'tracknumber': 2
+        u'path': u'folder_path_4/artist/2.mp3',
+        u'title': u'second',
+        u'artist': u'artist',
+        u'album': u'',
+        u'genre': u'genre',
+        u'date': 1990,
+        u'tracknumber': 2
     }
