@@ -39,17 +39,18 @@ class DuckTagsFileAPITestCase(unittest.TestCase):
         }
 
     def test_get_music_files(self):
-        current_music_files_dict = self.file_api.get_music_files_from_files_dict(self.files_dict,
-                                                                                 self.music_extensions_list)
+        self.file_api.set_music_extensions_list(self.music_extensions_list)
+        current_music_files_dict = self.file_api.get_music_files_from_files_dict(self.files_dict)
         self.assertDictEqual(self.music_files_dict, current_music_files_dict)
 
     def test_get_music_files_empty_extensions_list(self):
-        current_music_files_dict = self.file_api.get_music_files_from_files_dict(self.files_dict,
-                                                                                 self.empty_music_extensions_list)
+        self.file_api.set_music_extensions_list(self.empty_music_extensions_list)
+        current_music_files_dict = self.file_api.get_music_files_from_files_dict(self.files_dict)
         self.assertDictEqual(self.empty_music_files_dict, current_music_files_dict)
 
     def test_get_music_files_check_extensions_list(self):
-        self.file_api.get_music_files_from_files_dict(self.files_dict, self.doubled_music_extensions_list)
+        self.file_api.set_music_extensions_list(self.doubled_music_extensions_list)
+        self.file_api.get_music_files_from_files_dict(self.files_dict)
 
         current_extensions_list = self.file_manager.music_extensions_list
 
