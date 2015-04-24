@@ -32,8 +32,9 @@ class DuckTagsDataBaseManager(object):
         self.metadata_api = DuckTagsMetadataAPI()
         self.db_name = u'DuckTagsDB'
         self.db = Database(self.db_name)
+        self.path_index = DuckTagsDataBaseIndexes.MusicPathIndex(self.db.path, 'path')
         self.db_indexes = [
-            DuckTagsDataBaseIndexes.MusicPathIndex(self.db.path, 'path')
+            self.path_index
         ]
 
     def scan_folder(self, folder_path):
@@ -44,6 +45,7 @@ class DuckTagsDataBaseManager(object):
     def clean_db(self):
         self.__clean_db__()
         self.__clean_indexes__()
+        self.db_indexes.append(self.path_index)
 
     def search_for_file(self, search_option, search_pattern):
         pass
