@@ -130,7 +130,7 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
 
         self.db_manager.__clean_indexes__()
 
-        self.assertListEqual([], self.db_manager.db_indexes)
+        self.assertListEqual([self.db_manager.path_index], self.db_manager.db_indexes)
 
     @mock.patch('Src.DuckTagsDataBaseManager.Database.destroy_index')
     def test_clean_indexes_no_indexes(self, mock_destroy_index):

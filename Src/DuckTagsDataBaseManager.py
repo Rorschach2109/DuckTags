@@ -96,4 +96,4 @@ class DuckTagsDataBaseManager(object):
         for index in self.db_indexes:
             self.db.destroy_index(index)
 
-        self.db_indexes = []
+        self.db_indexes = [self.path_index]
