@@ -1,4 +1,4 @@
-from Src.DuckTagsDataBaseManager import DuckTagsDataBaseManager
+from Src.DuckTagsDataBaseManagerCodernity import DuckTagsDataBaseManager
 from Test.TestUtils.DuckTagsTestDataBaseManagerUtils import DuckTagsTestDataBaseManagerUtils
 
 import unittest

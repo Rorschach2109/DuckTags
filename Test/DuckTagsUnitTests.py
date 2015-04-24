@@ -23,9 +23,9 @@ if __name__ == '__main__':
         test_loader.loadTestsFromTestCase(
             Test.DuckTags_Src_Tests.DuckTagsFileNamesManagerTest.DuckTagsFileNamesManagerTestCase
         ),
-        test_loader.loadTestsFromTestCase(
-            Test.DuckTags_Src_Tests.DuckTagsDataBaseManagerTest.DuckTagsDataBaseManagerTestCase
-        ),
+        #test_loader.loadTestsFromTestCase(
+        #    Test.DuckTags_Src_Tests.DuckTagsDataBaseManagerTest.DuckTagsDataBaseManagerTestCase
+        #),
 
     ))
 
