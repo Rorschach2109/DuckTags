@@ -1,6 +1,7 @@
 from DuckTags_API.DuckTagsFileAPI import DuckTagsFileAPI
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
 from Src.DuckTagsDatabaseTools import DuckTagsMusicFileModel
+from Src.DuckTagsSearchManager import DuckTagsSearchManager
 from Src.DuckTagsDatabaseTools.DuckTagsDataBaseIndexCreator import DuckTagsDataBaseIndexCreator
 
 import functools
@@ -36,6 +37,7 @@ class DuckTagsDataBaseManager(object):
         self.db_indexes = [
             self.path_index
         ]
+        self.search_manager = DuckTagsSearchManager(self)
 
     def scan_folder(self, folder_path):
         music_files_dict = self.__get_music_files_from_folder__(folder_path)
@@ -48,7 +50,7 @@ class DuckTagsDataBaseManager(object):
         self.db_indexes.append(self.path_index)
 
     def search_for_files(self, search_option, **search_args):
-        pass
+        self.search_manager.search_for_files(search_option, **search_args)
 
     def append_db_index(self, db_index):
         try:
