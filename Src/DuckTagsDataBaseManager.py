@@ -1,7 +1,7 @@
 from DuckTags_API.DuckTagsFileAPI import DuckTagsFileAPI
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
-from Src.DuckTagsDatabaseTools import DuckTagsDataBaseIndexes
 from Src.DuckTagsDatabaseTools import DuckTagsMusicFileModel
+from Src.DuckTagsDatabaseTools.DuckTagsDataBaseIndexCreator import DuckTagsDataBaseIndexCreator
 
 import functools
 
@@ -32,7 +32,7 @@ class DuckTagsDataBaseManager(object):
         self.metadata_api = DuckTagsMetadataAPI()
         self.db_name = u'DuckTagsDB'
         self.db = Database(self.db_name)
-        self.path_index = DuckTagsDataBaseIndexes.MusicPathIndex(self.db.path, 'path')
+        self.path_index = DuckTagsDataBaseIndexCreator.create_hash_index(self.db.path, 'path')
         self.db_indexes = [
             self.path_index
         ]
@@ -47,7 +47,7 @@ class DuckTagsDataBaseManager(object):
         self.__clean_indexes__()
         self.db_indexes.append(self.path_index)
 
-    def search_for_files(self, search_option, search_pattern):
+    def search_for_files(self, search_option, **search_args):
         pass
 
     def append_db_index(self, db_index):
