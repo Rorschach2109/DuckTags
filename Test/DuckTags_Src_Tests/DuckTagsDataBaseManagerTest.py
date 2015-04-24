@@ -63,6 +63,8 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
         mock_db_get.return_value = None
         mock_db_create.return_value = None
         mock_db_add_index.return_value = None
+
+        self.db_manager.db_indexes = range(10)
         self.db_manager.__insert_music_files_to_db__(self.music_files_dict)
 
         calls = [
