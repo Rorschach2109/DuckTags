@@ -8,5 +8,8 @@ class DuckTagsDataBaseAPI(object):
     def scan_folder(self, folder_path):
         return self.data_base_manager.scan_folder(folder_path)
 
+    def clean_db(self):
+        return self.data_base_manager.clean_db()
+
     def search_for_file(self, search_option, search_pattern):
         return self.data_base_manager.search_for_file(search_option, search_pattern)

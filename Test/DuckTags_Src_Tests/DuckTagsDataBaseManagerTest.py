@@ -29,6 +29,9 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
         cls.music_file_model_serialization_no_album = \
             DuckTagsTestDataBaseManagerUtils.music_file_model_serialization_no_album
 
+    def setUp(self):
+        self.db_manager.db_indexes = []
+
     def test_get_music_file_path_valid(self):
         music_files_directories = list(DuckTagsDataBaseManager.__get_music_file_path__(self.music_files_dict_valid))
         self.assertListEqual(self.music_files_directories_valid, music_files_directories)
@@ -86,3 +89,42 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
     def test_music_file_serialization_no_album(self):
         serialization_data = self.music_file_model_no_album.serialize()
         self.assertDictEqual(self.music_file_model_serialization_no_album, serialization_data)
+
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.delete')
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.all')
+    def test_clean_db(self, mock_db_all, mock_db_delete):
+        mock_db_all.return_value = range(10)
+        mock_db_delete.return_value = None
+
+        self.db_manager.__clean_db__()
+
+        calls = [mock.call(element) for element in range(10)]
+        mock_db_delete.assert_has_calls(calls)
+
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.delete')
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.all')
+    def test_clean_db_no_elements(self, mock_db_all, mock_db_delete):
+        mock_db_all.return_value = []
+        mock_db_delete.return_value = None
+
+        self.db_manager.__clean_db__()
+
+        self.assertFalse(mock_db_delete.called)
+
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.destroy_index')
+    def test_clean_indexes(self, mock_destroy_index):
+        mock_destroy_index.return_value = None
+        self.db_manager.db_indexes = range(10)
+
+        self.db_manager.__clean_indexes__()
+
+        calls = [mock.call(index) for index in range(10)]
+        mock_destroy_index.assert_has_calls(calls)
+
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.destroy_index')
+    def test_clean_indexes_no_indexes(self, mock_destroy_index):
+        mock_destroy_index.return_value = None
+
+        self.db_manager.__clean_indexes__()
+
+        self.assertFalse(mock_destroy_index.called)
