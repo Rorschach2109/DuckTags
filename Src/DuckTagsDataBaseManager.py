@@ -11,7 +11,7 @@ def database_access(foo):
 
     @functools.wraps(foo)
     def wrapper(manager, *args):
-        manager.connection = lite.connect(manager.db_name + '.db')
+        manager.connection = lite.connect(manager.db_name)
 
         manager.connection.close()
         manager.connection = None
@@ -23,7 +23,7 @@ class DuckTagsDataBaseManager(object):
     def __init__(self):
         self.file_api = DuckTagsFileAPI()
         self.metadata_api = DuckTagsMetadataAPI()
-        self.db_name = 'DuckTagsDB'
+        self.db_name = 'DuckTagsDB.db'
 
     def add_music_files_from_folder(self, folder_path):
         music_files_dict = self.__get_music_files_from_folder__(folder_path)
