@@ -124,6 +124,15 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
         mock_destroy_index.assert_has_calls(calls)
 
     @mock.patch('Src.DuckTagsDataBaseManager.Database.destroy_index')
+    def test_clean_indexes_check_indexes_list(self, mock_destroy_index):
+        mock_destroy_index.return_value = None
+        self.db_manager.db_indexes = range(10)
+
+        self.db_manager.__clean_indexes__()
+
+        self.assertListEqual([], self.db_manager.db_indexes)
+
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.destroy_index')
     def test_clean_indexes_no_indexes(self, mock_destroy_index):
         mock_destroy_index.return_value = None
 

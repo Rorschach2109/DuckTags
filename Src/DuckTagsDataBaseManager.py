@@ -81,3 +81,5 @@ class DuckTagsDataBaseManager(object):
     def __clean_indexes__(self):
         for index in self.db_indexes:
             self.db.destroy_index(index)
+
+        self.db_indexes = []
