@@ -139,3 +139,37 @@ class DuckTagsDataBaseManagerTestCase(unittest.TestCase):
         self.db_manager.__clean_indexes__()
 
         self.assertFalse(mock_destroy_index.called)
+
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.reindex')
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.add_index')
+    def test_append_db_index(self, mock_db_add_index, mock_db_reindex):
+        mock_db_add_index.return_value = None
+        mock_db_reindex.return_value = None
+
+        db_index = 'db_index'
+
+        self.db_manager.append_db_index(db_index)
+        expected_db_indexes_length = 1
+
+        self.assertEqual(expected_db_indexes_length, len(self.db_manager.db_indexes))
+        self.assertListEqual([db_index], self.db_manager.db_indexes)
+        mock_db_add_index.assert_called_once_with(db_index)
+
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.reindex')
+    @mock.patch('Src.DuckTagsDataBaseManager.Database.add_index')
+    def test_append_db_indexes(self, mock_db_add_index, mock_db_reindex):
+        mock_db_add_index.return_value = None
+        mock_db_reindex.return_value = None
+
+        db_indexes = ['db_index_1', 'db_index_2']
+        self.db_manager.append_db_indexes(db_indexes)
+        expected_db_indexes_length = 2
+
+        calls = [
+            mock.call(db_indexes[0]),
+            mock.call(db_indexes[1]),
+        ]
+
+        self.assertEqual(expected_db_indexes_length, len(self.db_manager.db_indexes))
+        self.assertListEqual(db_indexes, self.db_manager.db_indexes)
+        mock_db_add_index.assert_has_calls(calls)

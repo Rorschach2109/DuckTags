@@ -5,7 +5,7 @@ from Src.DuckTagsDatabaseTools import DuckTagsMusicFileModel
 
 import functools
 
-from CodernityDB.database import Database, RecordNotFound
+from CodernityDB.database import Database, RecordNotFound, PreconditionsException
 from CodernityDB.index import IndexConflict
 
 
@@ -47,6 +47,18 @@ class DuckTagsDataBaseManager(object):
 
     def search_for_file(self, search_option, search_pattern):
         pass
+
+    def append_db_index(self, db_index):
+        try:
+            self.db.add_index(db_index)
+            self.db.reindex()
+            self.db_indexes.append(db_index)
+        except (IndexConflict, PreconditionsException):
+            pass
+
+    def append_db_indexes(self, db_indexes_list):
+        for db_index in db_indexes_list:
+            self.append_db_index(db_index)
 
     def __get_music_files_from_folder__(self, folder_path):
         files_dict = self.file_api.get_files_dict_from_folder(folder_path)
