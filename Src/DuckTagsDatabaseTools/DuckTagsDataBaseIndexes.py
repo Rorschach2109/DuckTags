@@ -7,7 +7,10 @@ class MusicPathIndex(HashIndex):
         super(MusicPathIndex, self).__init__(*args, **kwargs)
 
     def make_key_value(self, data):
-        return md5(data['path']).digest(), None
+        return md5(data[self.name]).digest(), None
 
     def make_key(self, key):
         return md5(key).digest()
+
+    def get_name(self):
+        return self.name

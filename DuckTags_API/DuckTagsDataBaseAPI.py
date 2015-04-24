@@ -12,4 +12,4 @@ class DuckTagsDataBaseAPI(object):
         return self.data_base_manager.clean_db()
 
     def search_for_file(self, search_option, search_pattern):
-        return self.data_base_manager.search_for_file(search_option, search_pattern)
+        return self.data_base_manager.search_for_files(search_option, search_pattern)

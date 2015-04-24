@@ -47,7 +47,7 @@ class DuckTagsDataBaseManager(object):
         self.__clean_indexes__()
         self.db_indexes.append(self.path_index)
 
-    def search_for_file(self, search_option, search_pattern):
+    def search_for_files(self, search_option, search_pattern):
         pass
 
     def append_db_index(self, db_index):
@@ -76,7 +76,7 @@ class DuckTagsDataBaseManager(object):
 
     def __insert_music_file_model__(self, music_file_model):
         try:
-            self.db.get('path', music_file_model.path)
+            self.db.get(self.path_index.name, music_file_model.path)
         except RecordNotFound:
             self.db.insert(music_file_model.serialize())
 
