@@ -2,6 +2,8 @@ import unittest
 import mock
 
 from DuckTags_API.DuckTagsFolderStructureAPI import DuckTagsFolderStructureAPI
+from Src.DuckTagsDatabaseTools.DuckTagsMusicFileModel import DuckTagsMusicFileModel
+
 from Utils.DuckTagsUtils import DuckTagsUtils
 from Test.TestUtils.DuckTagsTestMp3Tags import DuckTagsTestMp3Tags
 from Test.TestUtils.DuckTagsTestMp3Mocks import DuckTagsMP3AudioMock
@@ -112,10 +114,10 @@ class DuckTagsFolderStructureAPITestCase(unittest.TestCase):
                                                       mock_os_isfile, mock_metadata):
         mp3_audio_mock = DuckTagsMP3AudioMock()
         mp3_audio_mock.clear_tags()
-        mock_metadata.return_value = {}
+        mock_metadata.return_value = DuckTagsMusicFileModel(self.file_path, {})
         mock_os_isfile.return_value = True
         mock_os_exists.return_value = False
 
         self.folder_structure_api.reorganize_files_with_pattern([self.file_path], 1)
 
-        self.assertFalse(mock_os_rename.called)
+        self.assertTrue(mock_os_rename.called)

@@ -1,3 +1,5 @@
+from Src.DuckTagsDatabaseTools.DuckTagsMusicFileModel import DuckTagsMusicFileModel
+
 from mutagen.easyid3 import EasyID3
 
 
@@ -8,6 +10,7 @@ class DuckTagsMp3MetadataManager(object):
     def __init__(self):
         self.audio = None
         self.title_tag = u'title'
+        self.artist_tag = u'artist'
         self.album_tag = u'album'
         self.genre_tag = u'genre'
         self.date_tag = u'date'
@@ -27,29 +30,32 @@ class DuckTagsMp3MetadataManager(object):
 
         metadata_tags = dict()
         metadata_tags[self.title_tag] = self.__get_metadata_field__(self.title_tag)
+        metadata_tags[self.artist_tag] = self.__get_metadata_field__(self.artist_tag)
         metadata_tags[self.album_tag] = self.__get_metadata_field__(self.album_tag)
         metadata_tags[self.genre_tag] = self.__get_metadata_field__(self.genre_tag)
         metadata_tags[self.date_tag] = self.__get_metadata_field__(self.date_tag)
         metadata_tags[self.track_number_tag] = self.__get_metadata_field__(self.track_number_tag)
 
-        return metadata_tags
+        return DuckTagsMusicFileModel(music_file_path, metadata_tags)
 
     def get_music_files_list_metadata(self, music_files_paths_list):
 
         title_set = set()
+        artist_set = set()
         album_set = set()
         genre_set = set()
         date_set = set()
         track_number_set = set()
 
         for music_file_path in music_files_paths_list:
-            file_metadata_tags = self.get_music_file_metadata(music_file_path)
+            music_file_model = self.get_music_file_metadata(music_file_path)
 
-            title_set.add(file_metadata_tags.get(self.title_tag, u''))
-            album_set.add(file_metadata_tags.get(self.album_tag, u''))
-            genre_set.add(file_metadata_tags.get(self.genre_tag, u''))
-            date_set.add(file_metadata_tags.get(self.date_tag, u''))
-            track_number_set.add(file_metadata_tags.get(self.track_number_tag, u''))
+            title_set.add(music_file_model.title)
+            artist_set.add(music_file_model.artist)
+            album_set.add(music_file_model.album)
+            genre_set.add(music_file_model.genre)
+            date_set.add(music_file_model.date)
+            track_number_set.add(music_file_model.tracknumber)
 
         metadata_tags = dict()
 
@@ -64,7 +70,7 @@ class DuckTagsMp3MetadataManager(object):
         metadata_tags[self.track_number_tag] = track_number_set.pop() if len(track_number_set) == 1 \
             else self.multiple_values_message
 
-        return metadata_tags
+        return DuckTagsMusicFileModel(self.multiple_values_message, metadata_tags)
 
     def set_music_file_metadata(self, music_file_path, music_metadata_dict):
         try:

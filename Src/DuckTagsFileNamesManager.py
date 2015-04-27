@@ -47,12 +47,10 @@ class DuckTagsFileManager(object):
         if file_format_pattern_index >= len(self.utils.file_format_patterns):
             return False
 
-        metadata_tags_dict = self.metadata_api.get_music_file_metadata(file_path)
-        if not metadata_tags_dict:
-            return False
+        music_file_model = self.metadata_api.get_music_file_metadata(file_path)
 
-        track_number = metadata_tags_dict['tracknumber']
-        title = metadata_tags_dict['title']
+        track_number = music_file_model.tracknumber
+        title = music_file_model.title
 
         if file_format_pattern_index == 0 or file_format_pattern_index == 1:
             self.file_name = self.utils.file_format_patterns[file_format_pattern_index][1] % (track_number, title)

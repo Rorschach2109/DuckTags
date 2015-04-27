@@ -1,4 +1,5 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
+from Src.DuckTagsDatabaseTools.DuckTagsMusicFileModel import DuckTagsMusicFileModel
 from Test.TestUtils.DuckTagsTestMp3Tags import DuckTagsTestMp3Tags
 from Test.TestUtils.DuckTagsTestMp3Mocks import DuckTagsMP3AudioMock
 
@@ -21,6 +22,8 @@ class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
 
         cls.invalid_music_file_path = 'file_name.xxx'
         cls.invalid_music_files_paths_list = ['file_name.mp3', 'file_name.xxx']
+
+        cls.multiple_values_text = u'Multiple Values'
 
     def test_get_metadata_mp3_manager_index(self):
         self.metadata_api.get_music_file_metadata(self.mp3_file_path)
@@ -50,41 +53,51 @@ class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
     def test_get_metadata_mp3_valid_tags(self, mock_mutagen):
         mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags
 
-        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+        expected_music_file_model = DuckTagsMusicFileModel(self.mp3_file_path,
+                                                           DuckTagsTestMp3Tags.valid_mp3_tags)
+        current_music_file_model = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
 
-        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags, current_tags)
+        self.assertDictEqual(expected_music_file_model.serialize(), current_music_file_model.serialize())
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_get_metadata_mp3_valid_tags_no_title(self, mock_mutagen):
         mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags_no_title
 
-        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+        expected_music_file_model = DuckTagsMusicFileModel(self.mp3_file_path,
+                                                           DuckTagsTestMp3Tags.valid_mp3_tags_no_title)
+        current_music_file_model = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
 
-        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags_no_title, current_tags)
+        self.assertDictEqual(expected_music_file_model.serialize(), current_music_file_model.serialize())
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_get_metadata_mp3_valid_tags_no_album(self, mock_mutagen):
         mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags_no_album
 
-        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+        expected_music_file_model = DuckTagsMusicFileModel(self.mp3_file_path,
+                                                           DuckTagsTestMp3Tags.valid_mp3_tags_no_album)
+        current_music_file_model = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
 
-        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags_no_album, current_tags)
+        self.assertDictEqual(expected_music_file_model.serialize(), current_music_file_model.serialize())
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_get_metadata_mp3_valid_tags_no_genre(self, mock_mutagen):
         mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags_no_genre
 
-        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+        expected_music_file_model = DuckTagsMusicFileModel(self.mp3_file_path,
+                                                           DuckTagsTestMp3Tags.valid_mp3_tags_no_genre)
+        current_music_file_model = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
 
-        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags_no_genre, current_tags)
+        self.assertDictEqual(expected_music_file_model.serialize(), current_music_file_model.serialize())
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_get_metadata_mp3_valid_tags_no_date(self, mock_mutagen):
         mock_mutagen.return_value = DuckTagsTestMp3Tags.valid_mp3_mutagen_tags_no_date
 
-        current_tags = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
+        expected_music_file_model = DuckTagsMusicFileModel(self.mp3_file_path,
+                                                           DuckTagsTestMp3Tags.valid_mp3_tags_no_date)
+        current_music_file_model = self.metadata_api.get_music_file_metadata(self.mp3_file_path)
 
-        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags_no_date, current_tags)
+        self.assertDictEqual(expected_music_file_model.serialize(), current_music_file_model.serialize())
 
     def test_get_metadata_list_mp3_manager_index(self):
         self.metadata_api.get_music_files_list_metadata(self.mp3_files_paths_list)
@@ -114,9 +127,11 @@ class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
             DuckTagsTestMp3Tags.valid_mp3_mutagen_tags
         ]
 
-        current_tags = self.metadata_api.get_music_files_list_metadata(self.mp3_files_paths_list)
+        expected_music_file_model = DuckTagsMusicFileModel(self.multiple_values_text,
+                                                           DuckTagsTestMp3Tags.valid_mp3_tags)
+        current_music_file_model = self.metadata_api.get_music_files_list_metadata(self.mp3_files_paths_list)
 
-        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_tags, current_tags)
+        self.assertDictEqual(expected_music_file_model.serialize(), current_music_file_model.serialize())
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_get_metadata_list_mp3_valid_tags_diff_titles(self, mock_mutagen):
@@ -126,9 +141,11 @@ class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
             DuckTagsTestMp3Tags.valid_mp3_second_mutagen_tags
         ]
 
-        current_tags = self.metadata_api.get_music_files_list_metadata(self.mp3_files_paths_list)
+        expected_music_file_model = DuckTagsMusicFileModel(self.multiple_values_text,
+                                                           DuckTagsTestMp3Tags.valid_mp3_multi_files_tags)
+        current_music_file_model = self.metadata_api.get_music_files_list_metadata(self.mp3_files_paths_list)
 
-        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_multi_files_tags, current_tags)
+        self.assertDictEqual(expected_music_file_model.serialize(), current_music_file_model.serialize())
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_get_metadata_list_mp3_valid_tags_diff_whole(self, mock_mutagen):
@@ -138,9 +155,11 @@ class DuckTagsMP3MetadataAPITestCase(unittest.TestCase):
             DuckTagsTestMp3Tags.valid_mp3_mutagen_empty_tags
         ]
 
-        current_tags = self.metadata_api.get_music_files_list_metadata(self.mp3_files_paths_list)
+        expected_music_file_model = DuckTagsMusicFileModel(self.multiple_values_text,
+                                                           DuckTagsTestMp3Tags.valid_mp3_multi_values_files_tags)
+        current_music_file_model = self.metadata_api.get_music_files_list_metadata(self.mp3_files_paths_list)
 
-        self.assertDictEqual(DuckTagsTestMp3Tags.valid_mp3_multi_values_files_tags, current_tags)
+        self.assertDictEqual(expected_music_file_model.serialize(), current_music_file_model.serialize())
 
     @mock.patch('Src.DuckTagsMp3MetadataManager.EasyID3')
     def test_set_metadata_mp3_manager_index(self, mock_mutagen):
