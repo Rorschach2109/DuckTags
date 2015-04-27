@@ -5,6 +5,7 @@ import Test.DuckTags_API_Tests.DuckTagsMP3MetadataAPITest
 import Test.DuckTags_API_Tests.DuckTagsFolderStructureAPITest
 
 import Test.DuckTags_Src_Tests.DuckTagsFileNamesManagerTest
+import Test.DuckTags_Src_Tests.DuckTagsDataBaseManagerTest
 
 
 if __name__ == '__main__':
@@ -21,6 +22,9 @@ if __name__ == '__main__':
         ),
         test_loader.loadTestsFromTestCase(
             Test.DuckTags_Src_Tests.DuckTagsFileNamesManagerTest.DuckTagsFileNamesManagerTestCase
+        ),
+        test_loader.loadTestsFromTestCase(
+            Test.DuckTags_Src_Tests.DuckTagsDataBaseManagerTest.DuckTagsDataBaseManagerTestCase
         ),
     ))
 

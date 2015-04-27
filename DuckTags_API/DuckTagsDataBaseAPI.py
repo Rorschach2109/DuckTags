@@ -4,6 +4,7 @@ from Src.DuckTagsDataBaseManager import DuckTagsDataBaseManager
 class DuckTagsDataBaseAPI(object):
     def __init__(self):
         self.data_base_manager = DuckTagsDataBaseManager()
+        self.data_base_manager.initialize_db()
 
     def add_music_files_from_folder(self, folder_path):
         return self.data_base_manager.add_music_files_from_folder(folder_path)
