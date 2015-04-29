@@ -13,6 +13,9 @@ class DuckTagsApp(QtGui.QMainWindow):
 
         self.__init_ui__()
 
+    def on_close(self):
+        self.close()
+
     def __init_ui__(self):
         self.setWindowTitle(self.app_name)
         self.setWindowIcon(QtGui.QIcon(self.icon_path))
