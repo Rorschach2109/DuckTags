@@ -36,9 +36,14 @@ class DuckTagsMp3MetadataManager(object):
         metadata_tags[self.date_tag] = self.__get_metadata_field__(self.date_tag)
         metadata_tags[self.track_number_tag] = self.__get_metadata_field__(self.track_number_tag)
 
+        self.audio = None
+
         return DuckTagsMusicFileModel(music_file_path, metadata_tags)
 
     def get_music_files_list_metadata(self, music_files_paths_list):
+
+        if len(music_files_paths_list) == 1:
+            return self.get_music_file_metadata(music_files_paths_list[0])
 
         title_set = set()
         artist_set = set()
