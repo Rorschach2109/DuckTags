@@ -1,57 +1,39 @@
-from DuckTagsView.DuckTagsAppMetadataPanel import DuckTagsAppMetadataPanel
-from DuckTagsView.DuckTagsAppFilesPanel import DuckTagsAppFilesPanel
 from DuckTagsView.DuckTagsAppMenuBar import DuckTagsAppMenuBar
-from DuckTagsView.DuckTagsAppToolBar import DuckTagsAppToolBar
 
-import wx
+from PySide import QtGui
 
 
-class DuckTagsApp(wx.Frame):
+class DuckTagsApp(QtGui.QMainWindow):
+    def __init__(self):
+        super(DuckTagsApp, self).__init__()
 
-    def __init__(self, *args, **kwargs):
-        super(DuckTagsApp, self).__init__(*args, **kwargs)
-
-        self.min_size = (900, 600)
+        self.min_size = self.__compute_app_size__()
         self.app_name = 'DuckTags'
+        self.icon_path = ''
+
         self.__init_ui__()
 
-    def process_path(self, path):
-        self.files_panel.process_path(path)
-
-    def on_music_file_select(self, music_file_model):
-        self.metadata_panel.on_music_file_select(music_file_model)
-
-    def on_quit(self, event):
-        self.Close()
-
     def __init_ui__(self):
-        self.__create_menu_bar__()
-        self.__create_toolbar__()
-        self.__create_layout__()
+        self.setWindowTitle(self.app_name)
+        self.setWindowIcon(QtGui.QIcon(self.icon_path))
 
-        self.SetSize(self.min_size)
-        self.SetMinSize(self.min_size)
-        self.SetTitle(self.app_name)
+        self.resize(*self.min_size)
+        self.__center_window__()
 
-        self.Center()
-        self.Show(True)
+        menu_bar = DuckTagsAppMenuBar(parent=self)
+        self.setMenuBar(menu_bar)
 
-    def __create_menu_bar__(self):
-        menu_bar = DuckTagsAppMenuBar()
-        self.SetMenuBar(menu_bar)
-        self.Bind(wx.EVT_MENU, self.on_quit, id=wx.ID_EXIT)
+        self.show()
 
-    def __create_toolbar__(self):
-        toolbar = DuckTagsAppToolBar(parent=self)
-        self.SetToolBar(toolbar)
+    def __center_window__(self):
+        center_pos = QtGui.QDesktopWidget().availableGeometry().center()
+        frame_rect = self.frameGeometry()
 
-    def __create_layout__(self):
-        main_box = wx.BoxSizer(wx.HORIZONTAL)
+        frame_rect.moveCenter(center_pos)
+        self.move(frame_rect.topLeft())
 
-        self.metadata_panel = DuckTagsAppMetadataPanel(self, -1, style=wx.SIMPLE_BORDER)
-        self.files_panel = DuckTagsAppFilesPanel(self, -1)
-
-        main_box.Add(self.metadata_panel, 2, wx.EXPAND | wx.ALL, 1)
-        main_box.Add(self.files_panel, 3, wx.EXPAND | wx.ALL, 1)
-
-        self.SetSizer(main_box)
+    @staticmethod
+    def __compute_app_size__():
+        width = QtGui.QDesktopWidget().availableGeometry().width() / 2
+        height = QtGui.QDesktopWidget().availableGeometry().height() * 0.66
+        return width, height
