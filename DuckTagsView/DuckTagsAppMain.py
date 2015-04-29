@@ -1,13 +1,14 @@
 from DuckTagsView.DuckTagsApp import DuckTagsApp
 
-import wx
+from PySide import QtGui
+import sys
 
 
 class DuckTagsAppMain(object):
 
     @staticmethod
     def run_duck_tags_app():
-        app = wx.App()
-        DuckTagsApp(None)
+        app = QtGui.QApplication(sys.argv)
+        duck_tags_app = DuckTagsApp()
 
-        app.MainLoop()
+        sys.exit(app.exec_())
