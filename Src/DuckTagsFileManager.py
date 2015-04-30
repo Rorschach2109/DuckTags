@@ -26,6 +26,8 @@ class DuckTagsFileManager(object):
                 lambda file_name: file_name.endswith(tuple(self.music_extensions_list)),
                 files_dict[folder_name]
             )
+            if not music_files_dict[folder_name]:
+                music_files_dict.pop(folder_name)
 
         return music_files_dict
 
