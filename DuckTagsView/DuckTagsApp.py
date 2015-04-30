@@ -23,12 +23,7 @@ class DuckTagsApp(QtGui.QMainWindow):
 
         self.resize(*self.min_size)
         self.__center_window__()
-
-        menu_bar = DuckTagsAppMenuBar(parent=self)
-        self.setMenuBar(menu_bar)
-
-        tool_bar = DuckTagsAppToolBar(parent=self)
-        self.addToolBar(tool_bar)
+        self.__add_bars__()
 
         self.show()
 
@@ -38,6 +33,13 @@ class DuckTagsApp(QtGui.QMainWindow):
 
         frame_rect.moveCenter(center_pos)
         self.move(frame_rect.topLeft())
+
+    def __add_bars__(self):
+        menu_bar = DuckTagsAppMenuBar(parent=self)
+        self.setMenuBar(menu_bar)
+
+        tool_bar = DuckTagsAppToolBar(parent=self)
+        self.addToolBar(tool_bar)
 
     @staticmethod
     def __compute_app_size__():
