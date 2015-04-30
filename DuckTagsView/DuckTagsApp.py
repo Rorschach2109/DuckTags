@@ -1,5 +1,6 @@
 from DuckTagsView.DuckTagsAppMenuBar import DuckTagsAppMenuBar
 from DuckTagsView.DuckTagsAppToolBar import DuckTagsAppToolBar
+from DuckTagsView.DuckTagsAppMainWidget import DuckTagsAppMainWidget
 
 from PySide import QtGui
 
@@ -11,6 +12,8 @@ class DuckTagsApp(QtGui.QMainWindow):
         self.min_size = self.__compute_app_size__()
         self.app_name = 'DuckTags'
         self.icon_path = ''
+
+        self.main_widget = DuckTagsAppMainWidget(parent=self)
 
         self.__init_ui__()
 
@@ -24,6 +27,8 @@ class DuckTagsApp(QtGui.QMainWindow):
         self.resize(*self.min_size)
         self.__center_window__()
         self.__add_bars__()
+
+        self.setCentralWidget(self.main_widget)
 
         self.show()
 
