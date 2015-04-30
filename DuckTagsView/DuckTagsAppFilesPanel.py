@@ -1,8 +1,24 @@
 from DuckTags_API.DuckTagsFileAPI import DuckTagsFileAPI
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
 
+import functools
+
 from PySide import QtGui
 from PySide import QtCore
+
+
+def item_selection_changed_connection(foo):
+
+    @functools.wraps(foo)
+    def wrapper(files_panel, *args):
+        try:
+            files_panel.itemSelectionChanged.disconnect(files_panel.on_item_selection_changed)
+        except RuntimeError:
+            pass
+
+        return foo(files_panel, *args)
+
+    return wrapper
 
 
 class DuckTagsAppFilesPanel(QtGui.QListWidget):
@@ -23,9 +39,8 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
         files_dict = self.file_api.get_files_dict_from_folder(selected_directory)
         self.__insert_list_items__(files_dict)
 
+    @item_selection_changed_connection
     def on_item_selection_changed(self):
-        self.itemSelectionChanged.disconnect(self.on_item_selection_changed)
-
         selected_rows = self.__get_selected_rows__()
         self.__process_selected_roots__(selected_rows)
 
@@ -34,11 +49,9 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
 
         self.itemSelectionChanged.connect(self.on_item_selection_changed)
 
+    @item_selection_changed_connection
     def keyPressEvent(self, *args, **kwargs):
-        self.itemSelectionChanged.disconnect(self.on_item_selection_changed)
         super(DuckTagsAppFilesPanel, self).keyPressEvent(*args, **kwargs)
-        self.itemSelectionChanged.connect(self.on_item_selection_changed)
-
         self.on_item_selection_changed()
 
     def __process_selected_roots__(self, selected_rows):
