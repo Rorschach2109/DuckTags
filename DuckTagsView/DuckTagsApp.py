@@ -1,4 +1,5 @@
 from DuckTagsView.DuckTagsAppMenuBar import DuckTagsAppMenuBar
+from DuckTagsView.DuckTagsAppToolBar import DuckTagsAppToolBar
 
 from PySide import QtGui
 
@@ -25,6 +26,9 @@ class DuckTagsApp(QtGui.QMainWindow):
 
         menu_bar = DuckTagsAppMenuBar(parent=self)
         self.setMenuBar(menu_bar)
+
+        tool_bar = DuckTagsAppToolBar(parent=self)
+        self.addToolBar(tool_bar)
 
         self.show()
 
