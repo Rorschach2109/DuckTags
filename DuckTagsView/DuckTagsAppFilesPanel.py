@@ -10,11 +10,12 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
         super(DuckTagsAppFilesPanel, self).__init__(*args, **kwargs)
 
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        self.itemSelectionChanged.connect(self.on_item_selection_changed)
 
         self.file_api = DuckTagsFileAPI()
         self.metadata_api = DuckTagsMetadataAPI()
         self.root_items_rows_list = list()
+
+        self.itemSelectionChanged.connect(self.on_item_selection_changed)
 
     def on_browse_folder(self, selected_directory):
         self.__clean_widget_list__()
@@ -23,9 +24,22 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
         self.__insert_list_items__(files_dict)
 
     def on_item_selection_changed(self):
-        selected_rows = [self.row(item) for item in self.selectedItems()]
+        self.itemSelectionChanged.disconnect(self.on_item_selection_changed)
 
+        selected_rows = self.__get_selected_rows__()
         self.__process_selected_roots__(selected_rows)
+
+        selected_rows = self.__get_selected_rows__()
+        print selected_rows
+
+        self.itemSelectionChanged.connect(self.on_item_selection_changed)
+
+    def keyPressEvent(self, *args, **kwargs):
+        self.itemSelectionChanged.disconnect(self.on_item_selection_changed)
+        super(DuckTagsAppFilesPanel, self).keyPressEvent(*args, **kwargs)
+        self.itemSelectionChanged.connect(self.on_item_selection_changed)
+
+        self.on_item_selection_changed()
 
     def __process_selected_roots__(self, selected_rows):
         bottom_bound_list = filter(lambda row: row in self.root_items_rows_list, selected_rows)
@@ -39,8 +53,12 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
                 upper_bound = self.count()
 
             self.item(bottom_bound).setSelected(False)
+
             for item_row in range(bottom_bound+1, upper_bound):
                 self.item(item_row).setSelected(True)
+
+    def __get_selected_rows__(self):
+        return [self.row(item) for item in self.selectedItems()]
 
     def __clean_widget_list__(self):
         self.root_items_rows_list = []
