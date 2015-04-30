@@ -8,7 +8,9 @@ from PySide import QtCore
 class DuckTagsAppFilesPanel(QtGui.QListWidget):
     def __init__(self, *args, **kwargs):
         super(DuckTagsAppFilesPanel, self).__init__(*args, **kwargs)
+
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.itemSelectionChanged.connect(self.on_item_selection_changed)
 
         self.file_api = DuckTagsFileAPI()
         self.metadata_api = DuckTagsMetadataAPI()
@@ -19,6 +21,26 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
 
         files_dict = self.file_api.get_files_dict_from_folder(selected_directory)
         self.__insert_list_items__(files_dict)
+
+    def on_item_selection_changed(self):
+        selected_rows = [self.row(item) for item in self.selectedItems()]
+
+        self.__process_selected_roots__(selected_rows)
+
+    def __process_selected_roots__(self, selected_rows):
+        bottom_bound_list = filter(lambda row: row in self.root_items_rows_list, selected_rows)
+
+        for bottom_bound in bottom_bound_list:
+            bottom_bound_index = self.root_items_rows_list.index(bottom_bound)
+
+            try:
+                upper_bound = self.root_items_rows_list[bottom_bound_index+1]
+            except IndexError:
+                upper_bound = self.count()
+
+            self.item(bottom_bound).setSelected(False)
+            for item_row in range(bottom_bound+1, upper_bound):
+                self.item(item_row).setSelected(True)
 
     def __clean_widget_list__(self):
         self.root_items_rows_list = []
