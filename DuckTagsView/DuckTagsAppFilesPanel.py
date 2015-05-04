@@ -39,6 +39,10 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
         files_dict = self.file_api.get_files_dict_from_folder(selected_directory)
         self.__insert_list_items__(files_dict)
 
+    def on_select_all(self):
+        self.__process_selected_roots__(self.root_items_rows_list)
+        self.on_item_selection_changed()
+
     @item_selection_changed_connection
     def on_item_selection_changed(self):
         selected_rows = self.__get_selected_rows__()
@@ -57,7 +61,7 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
         super(DuckTagsAppFilesPanel, self).keyPressEvent(event)
         key_id = event.key()
         if key_id == QtCore.Qt.Key_Down or key_id == QtCore.Qt.Key_Up \
-                or key_id == QtCore.Qt.Key_Control or key_id == QtCore.Qt.SHIFT:
+                or key_id == QtCore.Qt.Key_Control or key_id == QtCore.Qt.SHIFT or key_id == QtCore.Qt.Key_A:
             self.on_item_selection_changed()
 
     def __process_selected_roots__(self, selected_rows):

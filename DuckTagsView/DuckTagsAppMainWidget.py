@@ -19,6 +19,9 @@ class DuckTagsAppMainWidget(QtGui.QWidget):
     def on_reorganize(self):
         self.metadata_panel.on_reorganize()
 
+    def on_select_all(self):
+        self.files_panel.on_select_all()
+
     def insert_metadata_tags(self, selected_paths):
         self.metadata_panel.insert_metadata_tags(selected_paths)
 
