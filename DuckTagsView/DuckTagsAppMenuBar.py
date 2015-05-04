@@ -44,7 +44,7 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
     def __add_select_folder__(self, file_menu):
         select_folder_action = QtGui.QAction('&Select Folder', self)
         select_folder_action.setShortcut('Ctrl+O')
-        select_folder_action.setStatusTip('Select folder to scan files')
+        select_folder_action.setStatusTip('Select Folder To Scan Files')
 
         select_folder_function = self.parent().on_select_folder
         select_folder_action.triggered.connect(select_folder_function)
@@ -54,7 +54,7 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
     def __add_select_all__(self, file_menu):
         select_all_action = QtGui.QAction('&Select All', self)
         select_all_action.setShortcut('Ctrl+W')
-        select_all_action.setStatusTip('Select all files')
+        select_all_action.setStatusTip('Select All Files')
 
         select_all_function = self.parent().on_select_all
         select_all_action.triggered.connect(select_all_function)

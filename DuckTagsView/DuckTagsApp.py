@@ -1,5 +1,6 @@
 from DuckTagsView.DuckTagsAppMenuBar import DuckTagsAppMenuBar
 from DuckTagsView.DuckTagsAppToolBar import DuckTagsAppToolBar
+from DuckTagsView.DuckTagsAppStatusBar import DuckTagsAppStatusBar
 from DuckTagsView.DuckTagsAppMainWidget import DuckTagsAppMainWidget
 
 from PySide import QtGui
@@ -60,6 +61,9 @@ class DuckTagsApp(QtGui.QMainWindow):
 
         tool_bar = DuckTagsAppToolBar(parent=self)
         self.addToolBar(tool_bar)
+
+        status_bar = DuckTagsAppStatusBar(parent=self)
+        self.setStatusBar(status_bar)
 
     @staticmethod
     def __compute_app_size__():
