@@ -36,9 +36,20 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
 
     def __add_file_section__(self):
         file_menu = self.addMenu('&File')
+        self.__add_select_folder__(file_menu)
         self.__add_select_all__(file_menu)
         file_menu.addSeparator()
         self.__add_exit_action__(file_menu)
+
+    def __add_select_folder__(self, file_menu):
+        select_folder_action = QtGui.QAction('&Select Folder', self)
+        select_folder_action.setShortcut('Ctrl+O')
+        select_folder_action.setStatusTip('Select folder to scan files')
+
+        select_folder_function = self.parent().on_select_folder
+        select_folder_action.triggered.connect(select_folder_function)
+
+        file_menu.addAction(select_folder_action)
 
     def __add_select_all__(self, file_menu):
         select_all_action = QtGui.QAction('&Select All', self)

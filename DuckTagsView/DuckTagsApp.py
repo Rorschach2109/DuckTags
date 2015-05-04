@@ -29,6 +29,9 @@ class DuckTagsApp(QtGui.QMainWindow):
     def on_select_all(self):
         self.main_widget.on_select_all()
 
+    def on_select_folder(self):
+        self.main_widget.on_select_folder()
+
     def get_reorganize_pattern_index(self):
         return self.menuBar().get_reorganize_pattern_index()
 
