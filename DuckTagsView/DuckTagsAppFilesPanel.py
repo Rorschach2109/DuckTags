@@ -100,7 +100,7 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
         self.root_items_rows_list.append(self.row(root_item))
 
     def __insert_files_elements__(self, files_dict, root_folder):
-        for file_name in files_dict[root_folder]:
+        for file_name in sorted(files_dict[root_folder]):
             file_item = QtGui.QListWidgetItem()
             file_item.setText(file_name)
             file_item.setData(QtCore.Qt.UserRole, root_folder)
