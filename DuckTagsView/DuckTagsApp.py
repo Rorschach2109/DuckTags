@@ -23,6 +23,12 @@ class DuckTagsApp(QtGui.QMainWindow):
     def on_save(self):
         self.main_widget.on_save()
 
+    def on_reorganize(self):
+        self.main_widget.on_reorganize()
+
+    def get_reorganize_pattern_index(self):
+        return self.menuBar().get_reorganize_pattern_index()
+
     def __init_ui__(self):
         self.setWindowTitle(self.app_name)
         self.setWindowIcon(QtGui.QIcon(self.icon_path))

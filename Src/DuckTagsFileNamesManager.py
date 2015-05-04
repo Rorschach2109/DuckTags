@@ -50,6 +50,9 @@ class DuckTagsFileManager(object):
         music_file_model = self.metadata_api.get_music_file_metadata(file_path)
 
         track_number = music_file_model.tracknumber
+        if len(track_number) == 1:
+            track_number = '0%s' % track_number
+
         title = music_file_model.title
 
         if file_format_pattern_index == 0 or file_format_pattern_index == 1:

@@ -16,8 +16,14 @@ class DuckTagsAppMainWidget(QtGui.QWidget):
     def on_save(self):
         self.metadata_panel.on_save()
 
+    def on_reorganize(self):
+        self.metadata_panel.on_reorganize()
+
     def insert_metadata_tags(self, selected_paths):
         self.metadata_panel.insert_metadata_tags(selected_paths)
+
+    def get_reorganize_pattern_index(self):
+        return self.parent().get_reorganize_pattern_index()
 
     def __init_layout__(self):
         main_box = QtGui.QHBoxLayout()

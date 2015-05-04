@@ -1,4 +1,5 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
+from DuckTags_API.DuckTagsFolderStructureAPI import DuckTagsFolderStructureAPI
 
 from PySide import QtGui
 from PySide import QtCore
@@ -14,6 +15,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.default_path = os.path.expanduser('~')
 
         self.metadata_api = DuckTagsMetadataAPI()
+        self.folder_structure_api = DuckTagsFolderStructureAPI()
         self.current_paths = list()
 
         self.__init_layout__()
@@ -25,9 +27,12 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
         self.metadata_api.set_music_file_list_metadata(self.current_paths, music_file_model_dict)
 
-    def on_browse_folder_button(self):
-        self.current_paths = list()
+    def on_reorganize(self):
+        self.on_save()
+        reorganize_pattern_index = self.parentWidget().get_reorganize_pattern_index()
+        self.folder_structure_api.reorganize_files_with_pattern(self.current_paths, reorganize_pattern_index)
 
+    def on_browse_folder_button(self):
         directory_dialog = QtGui.QFileDialog()
 
         directory_dialog.setFileMode(QtGui.QFileDialog.Directory)
@@ -38,6 +43,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
         if selected_directory:
             self.__clean_lines_edit__()
+            self.current_paths = list()
+
             self.parentWidget().on_browse_folder(selected_directory)
 
     def insert_metadata_tags(self, selected_paths):
