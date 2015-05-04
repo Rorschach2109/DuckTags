@@ -45,14 +45,19 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
         self.__process_selected_roots__(selected_rows)
 
         selected_rows = self.__get_selected_rows__()
-        print selected_rows
+        selected_paths = ['/'.join([self.item(row).data(QtCore.Qt.UserRole), self.item(row).text()]) for
+                          row in selected_rows]
+
+        self.parent().insert_metadata_tags(selected_paths)
 
         self.itemSelectionChanged.connect(self.on_item_selection_changed)
 
     @item_selection_changed_connection
-    def keyPressEvent(self, *args, **kwargs):
-        super(DuckTagsAppFilesPanel, self).keyPressEvent(*args, **kwargs)
-        self.on_item_selection_changed()
+    def keyPressEvent(self, event):
+        super(DuckTagsAppFilesPanel, self).keyPressEvent(event)
+        key_id = event.key()
+        if key_id == QtCore.Qt.Key_Down or key_id == QtCore.Qt.Key_Up:
+            self.on_item_selection_changed()
 
     def __process_selected_roots__(self, selected_rows):
         bottom_bound_list = filter(lambda row: row in self.root_items_rows_list, selected_rows)
@@ -80,7 +85,7 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
     def __insert_list_items__(self, files_dict):
         for root_folder in sorted(files_dict):
             self.__insert_root_element__(root_folder)
-            self.addItems(files_dict[root_folder])
+            self.__insert_files_elements__(files_dict, root_folder)
 
     def __insert_root_element__(self, root_folder):
         root_item = QtGui.QListWidgetItem()
@@ -92,3 +97,10 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
 
         self.addItem(root_item)
         self.root_items_rows_list.append(self.row(root_item))
+
+    def __insert_files_elements__(self, files_dict, root_folder):
+        for file_name in files_dict[root_folder]:
+            file_item = QtGui.QListWidgetItem()
+            file_item.setText(file_name)
+            file_item.setData(QtCore.Qt.UserRole, root_folder)
+            self.addItem(file_item)

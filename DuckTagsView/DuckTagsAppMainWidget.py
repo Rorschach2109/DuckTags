@@ -13,6 +13,9 @@ class DuckTagsAppMainWidget(QtGui.QWidget):
     def on_browse_folder(self, selected_directory):
         self.files_panel.on_browse_folder(selected_directory)
 
+    def insert_metadata_tags(self, selected_paths):
+        pass
+
     def __init_layout__(self):
         main_box = QtGui.QHBoxLayout()
 
