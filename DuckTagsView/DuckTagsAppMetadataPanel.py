@@ -1,6 +1,7 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
 
 from PySide import QtGui
+from PySide import QtCore
 
 import os
 
@@ -13,6 +14,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.default_path = os.path.expanduser('~')
 
         self.metadata_api = DuckTagsMetadataAPI()
+        self.current_paths = list()
 
         self.__init_layout__()
 
@@ -30,7 +32,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             self.parentWidget().on_browse_folder(selected_directory)
 
     def insert_metadata_tags(self, selected_paths):
-        music_file_model = self.metadata_api.get_music_files_list_metadata(selected_paths)
+        self.current_paths = selected_paths
+        music_file_model = self.metadata_api.get_music_files_list_metadata(self.current_paths)
 
         try:
             music_file_model_dict = music_file_model.serialize()
@@ -87,6 +90,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             'genre': (QtGui.QLineEdit(), (5, 1)),
         }
 
+        self.__set_validators__()
+
         for line_edit_name in self.line_edits_dict:
             line_edit = self.line_edits_dict[line_edit_name][0]
             position = self.line_edits_dict[line_edit_name][1]
@@ -94,6 +99,15 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             line_edit.setEnabled(False)
 
             metadata_box.addWidget(line_edit, *position)
+
+    def __set_validators__(self):
+        date_regexp = QtCore.QRegExp("[1-2]{1}\d{3}")
+        date_validator = QtGui.QRegExpValidator(date_regexp)
+        self.line_edits_dict['date'][0].setValidator(date_validator)
+
+        track_number_regexp = QtCore.QRegExp("\d{3}")
+        track_number_validator = QtGui.QRegExpValidator(track_number_regexp)
+        self.line_edits_dict['tracknumber'][0].setValidator(track_number_validator)
 
     def __clean_lines_edit__(self):
         for line_edit_name in self.line_edits_dict:
