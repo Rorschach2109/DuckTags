@@ -1,5 +1,6 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
 from DuckTags_API.DuckTagsFolderStructureAPI import DuckTagsFolderStructureAPI
+from Utils.DuckTagsExceptions import DuckTagsRenameException
 
 from PySide import QtGui
 from PySide import QtCore
@@ -35,10 +36,13 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.on_save()
 
         reorganize_pattern_index = self.parentWidget().get_reorganize_pattern_index()
-        self.folder_structure_api.reorganize_files_with_pattern(self.current_paths, reorganize_pattern_index)
-
-        self.__clean_lines_edit__()
-        self.parentWidget().on_browse_folder(self.current_directory)
+        try:
+            self.folder_structure_api.reorganize_files_with_pattern(self.current_paths, reorganize_pattern_index)
+        except DuckTagsRenameException:
+            pass
+        else:
+            self.__clean_lines_edit__()
+            self.parentWidget().on_browse_folder(self.current_directory)
 
     def on_browse_folder_button(self):
         directory_dialog = QtGui.QFileDialog()

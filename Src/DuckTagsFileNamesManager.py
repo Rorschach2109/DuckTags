@@ -1,3 +1,5 @@
+from Utils.DuckTagsExceptions import DuckTagsRenameException
+
 import os
 
 
@@ -26,6 +28,8 @@ class DuckTagsFileManager(object):
 
         if not os.path.exists(new_file_path):
             os.rename(file_path, new_file_path)
+        else:
+            raise DuckTagsRenameException
 
     def __slice_file_path__(self, file_path):
         file_path_root_length = file_path.rfind(r'/') + 1
