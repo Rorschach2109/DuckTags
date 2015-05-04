@@ -29,6 +29,9 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.metadata_api.set_music_file_list_metadata(self.current_paths, music_file_model_dict)
 
     def on_reorganize(self):
+        if not self.current_directory:
+            return
+
         self.on_save()
 
         reorganize_pattern_index = self.parentWidget().get_reorganize_pattern_index()
