@@ -42,10 +42,11 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         except DuckTagsRenameException:
             raise
         else:
+            reorganized_files_number = len(self.current_paths)
             self.__clean_lines_edit__()
             self.parentWidget().on_browse_folder(self.current_directory)
 
-        return len(self.current_paths)
+        return reorganized_files_number
 
     def on_browse_folder_button(self):
         directory_dialog = QtGui.QFileDialog()
