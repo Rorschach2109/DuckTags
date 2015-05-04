@@ -21,7 +21,7 @@ class DuckTagsApp(QtGui.QMainWindow):
         self.close()
 
     def on_save(self):
-        print 'on_save'
+        self.main_widget.on_save()
 
     def __init_ui__(self):
         self.setWindowTitle(self.app_name)

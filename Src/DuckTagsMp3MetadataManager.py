@@ -22,6 +22,16 @@ class DuckTagsMp3MetadataManager(object):
         except (KeyError, IndexError, TypeError):
             return u''
 
+    def __get_metadata_fields_to_set__(self, music_metadata_dict, tag_name):
+        try:
+            tag_value = music_metadata_dict[tag_name]
+            if tag_value == self.multiple_values_message:
+                raise ValueError
+        except (KeyError, ValueError):
+            tag_value = self.__get_metadata_field__(tag_name)
+
+        self.audio[tag_name] = tag_value
+
     def get_music_file_metadata(self, music_file_path):
         try:
             self.audio = EasyID3(music_file_path)
@@ -66,6 +76,8 @@ class DuckTagsMp3MetadataManager(object):
 
         metadata_tags[self.title_tag] = title_set.pop() if len(title_set) == 1 \
             else self.multiple_values_message
+        metadata_tags[self.artist_tag] = artist_set.pop() if len(artist_set) == 1 \
+            else self.multiple_values_message
         metadata_tags[self.album_tag] = album_set.pop() if len(album_set) == 1 \
             else self.multiple_values_message
         metadata_tags[self.genre_tag] = genre_set.pop() if len(genre_set) == 1 \
@@ -83,18 +95,12 @@ class DuckTagsMp3MetadataManager(object):
         except Exception:
             pass
         else:
-            self.audio[self.title_tag] = music_metadata_dict.get(self.title_tag,
-                                                                 self.__get_metadata_field__(self.title_tag))
-            self.audio[self.album_tag] = music_metadata_dict.get(self.album_tag,
-                                                                 self.__get_metadata_field__(self.album_tag))
-            self.audio[self.genre_tag] = music_metadata_dict.get(self.genre_tag,
-                                                                 self.__get_metadata_field__(self.genre_tag))
-            self.audio[self.date_tag] = music_metadata_dict.get(self.date_tag,
-                                                                self.__get_metadata_field__(self.date_tag))
-            self.audio[self.track_number_tag] = \
-                music_metadata_dict.get(self.track_number_tag, self.__get_metadata_field__(self.track_number_tag))
+            for tag_name in [self.title_tag, self.artist_tag, self.album_tag,
+                             self.date_tag, self.track_number_tag, self.genre_tag]:
+                self.__get_metadata_fields_to_set__(music_metadata_dict, tag_name)
 
             self.audio.save()
+            self.audio = None
 
     def set_music_file_list_metadata(self, music_files_paths_list, music_metadata_dict):
         for music_file_path in music_files_paths_list:

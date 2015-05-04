@@ -10,8 +10,8 @@ class DuckTagsAppToolBar(QtGui.QToolBar):
         self.__add_save_action__()
 
     def __add_save_action__(self):
-        save_action = QtGui.QAction('Save', self.parent())
-        save_action.setShortcut('Ctrl+S')
-        save_action.triggered.connect(self.parent().on_save)
+        self.save_action = QtGui.QAction('Save', self.parent())
+        self.save_action.setShortcut('Ctrl+S')
+        self.save_action.triggered.connect(self.parent().on_save)
 
-        self.addAction(save_action)
+        self.addAction(self.save_action)

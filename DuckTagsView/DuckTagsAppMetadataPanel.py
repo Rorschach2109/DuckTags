@@ -1,4 +1,5 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
+from Src.DuckTagsDatabaseTools.DuckTagsMusicFileModel import DuckTagsMusicFileModel
 
 from PySide import QtGui
 from PySide import QtCore
@@ -18,7 +19,16 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
         self.__init_layout__()
 
+    def on_save(self):
+        music_file_model_dict = dict()
+        for line_edit_name in self.line_edits_dict:
+            music_file_model_dict[line_edit_name] = self.line_edits_dict[line_edit_name][0].text()
+
+        self.metadata_api.set_music_file_list_metadata(self.current_paths, music_file_model_dict)
+
     def on_browse_folder_button(self):
+        self.current_paths = list()
+
         directory_dialog = QtGui.QFileDialog()
 
         directory_dialog.setFileMode(QtGui.QFileDialog.Directory)
@@ -38,7 +48,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         try:
             music_file_model_dict = music_file_model.serialize()
         except AttributeError:
-            return self.__clean_lines_edit__()
+            return
 
         for key in music_file_model_dict:
             text = music_file_model_dict[key]
