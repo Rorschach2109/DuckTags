@@ -42,6 +42,7 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
     def on_select_all(self):
         self.__process_selected_roots__(self.root_items_rows_list)
         self.on_item_selection_changed()
+        return len(self.__get_selected_rows__())
 
     @item_selection_changed_connection
     def on_item_selection_changed(self):

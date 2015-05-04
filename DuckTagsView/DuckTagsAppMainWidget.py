@@ -14,19 +14,20 @@ class DuckTagsAppMainWidget(QtGui.QWidget):
         self.files_panel.on_browse_folder(selected_directory)
 
     def on_save(self):
-        self.metadata_panel.on_save()
+        return self.metadata_panel.on_save()
 
     def on_reorganize(self):
-        self.metadata_panel.on_reorganize()
+        return self.metadata_panel.on_reorganize()
 
     def on_select_all(self):
-        self.files_panel.on_select_all()
+        return self.files_panel.on_select_all()
 
     def on_select_folder(self):
         self.metadata_panel.on_browse_folder_button()
 
     def insert_metadata_tags(self, selected_paths):
         self.metadata_panel.insert_metadata_tags(selected_paths)
+        self.parentWidget().on_select_file(len(selected_paths))
 
     def get_reorganize_pattern_index(self):
         return self.parent().get_reorganize_pattern_index()
