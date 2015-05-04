@@ -17,6 +17,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.metadata_api = DuckTagsMetadataAPI()
         self.folder_structure_api = DuckTagsFolderStructureAPI()
         self.current_paths = list()
+        self.current_directory = None
 
         self.__init_layout__()
 
@@ -29,8 +30,12 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
     def on_reorganize(self):
         self.on_save()
+
         reorganize_pattern_index = self.parentWidget().get_reorganize_pattern_index()
         self.folder_structure_api.reorganize_files_with_pattern(self.current_paths, reorganize_pattern_index)
+
+        self.__clean_lines_edit__()
+        self.parentWidget().on_browse_folder(self.current_directory)
 
     def on_browse_folder_button(self):
         directory_dialog = QtGui.QFileDialog()
@@ -38,14 +43,14 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         directory_dialog.setFileMode(QtGui.QFileDialog.Directory)
         directory_dialog.setOption(QtGui.QFileDialog.ShowDirsOnly)
 
-        selected_directory = directory_dialog.getExistingDirectory(caption="Select Directory",
-                                                                   dir=self.default_path)
+        self.current_directory = directory_dialog.getExistingDirectory(caption="Select Directory",
+                                                                       dir=self.default_path)
 
-        if selected_directory:
+        if self.current_directory:
             self.__clean_lines_edit__()
             self.current_paths = list()
 
-            self.parentWidget().on_browse_folder(selected_directory)
+            self.parentWidget().on_browse_folder(self.current_directory)
 
     def insert_metadata_tags(self, selected_paths):
         self.current_paths = selected_paths
