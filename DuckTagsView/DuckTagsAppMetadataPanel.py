@@ -1,5 +1,4 @@
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
-from Src.DuckTagsDatabaseTools.DuckTagsMusicFileModel import DuckTagsMusicFileModel
 
 from PySide import QtGui
 from PySide import QtCore
@@ -100,15 +99,18 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             'genre': (QtGui.QLineEdit(), (5, 1)),
         }
 
-        self.__set_validators__()
+        metadata_box.addWidget(self.line_edits_dict['title'][0], *self.line_edits_dict['title'][1])
+        metadata_box.addWidget(self.line_edits_dict['artist'][0], *self.line_edits_dict['artist'][1])
+        metadata_box.addWidget(self.line_edits_dict['album'][0], *self.line_edits_dict['album'][1])
+        metadata_box.addWidget(self.line_edits_dict['date'][0], *self.line_edits_dict['date'][1])
+        metadata_box.addWidget(self.line_edits_dict['tracknumber'][0], *self.line_edits_dict['tracknumber'][1])
+        metadata_box.addWidget(self.line_edits_dict['genre'][0], *self.line_edits_dict['genre'][1])
 
         for line_edit_name in self.line_edits_dict:
             line_edit = self.line_edits_dict[line_edit_name][0]
-            position = self.line_edits_dict[line_edit_name][1]
-
             line_edit.setEnabled(False)
 
-            metadata_box.addWidget(line_edit, *position)
+        self.__set_validators__()
 
     def __set_validators__(self):
         date_regexp = QtCore.QRegExp("[1-2]{1}\d{3}")
