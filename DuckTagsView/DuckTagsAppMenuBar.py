@@ -10,6 +10,7 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
         self.current_pattern_index = None
 
         self.__add_file_section__()
+        self.__add_edit_section__()
         self.__add_reorganize_section__()
 
     def on_pattern_check(self, checked):
@@ -35,7 +36,19 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
 
     def __add_file_section__(self):
         file_menu = self.addMenu('&File')
+        self.__add_select_all__(file_menu)
+        file_menu.addSeparator()
         self.__add_exit_action__(file_menu)
+
+    def __add_select_all__(self, file_menu):
+        select_all_action = QtGui.QAction('&Select All', self)
+        select_all_action.setShortcut('Ctrl+W')
+        select_all_action.setStatusTip('Select all files')
+
+        select_all_function = self.parent().on_select_all
+        select_all_action.triggered.connect(select_all_function)
+
+        file_menu.addAction(select_all_action)
 
     def __add_exit_action__(self, file_menu):
         exit_action = QtGui.QAction('&Exit', self)
@@ -46,6 +59,31 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
         exit_action.triggered.connect(close_function)
 
         file_menu.addAction(exit_action)
+
+    def __add_edit_section__(self):
+        edit_menu = self.addMenu('&Edit')
+        self.__add_save_action__(edit_menu)
+        self.__add_reorganize_action__(edit_menu)
+
+    def __add_save_action__(self, edit_menu):
+        save_action = QtGui.QAction('&Save', self)
+        save_action.setShortcut('Ctrl+S')
+        save_action.setStatusTip('Save changes')
+
+        save_function = self.parent().on_save
+        save_action.triggered.connect(save_function)
+
+        edit_menu.addAction(save_action)
+
+    def __add_reorganize_action__(self, edit_menu):
+        reorganize_action = QtGui.QAction('&Reorganize', self)
+        reorganize_action.setShortcut('Ctrl+R')
+        reorganize_action.setStatusTip('Reorganize Files Structure')
+
+        reorganize_function = self.parent().on_reorganize
+        reorganize_action.triggered.connect(reorganize_function)
+
+        edit_menu.addAction(reorganize_action)
 
     def __add_reorganize_section__(self):
         reorganize_menu = self.addMenu('&Reorganize Patterns')
