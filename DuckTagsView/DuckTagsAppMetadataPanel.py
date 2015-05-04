@@ -62,6 +62,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         try:
             music_file_model_dict = music_file_model.serialize()
         except AttributeError:
+            self.__clean_lines_edit__()
             return
 
         for key in music_file_model_dict:
