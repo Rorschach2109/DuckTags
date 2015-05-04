@@ -1,3 +1,5 @@
+from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
+
 from PySide import QtGui
 
 import os
@@ -9,6 +11,9 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
         self.Direction = QtGui.QBoxLayout.TopToBottom
         self.default_path = os.path.expanduser('~')
+
+        self.metadata_api = DuckTagsMetadataAPI()
+
         self.__init_layout__()
 
     def on_browse_folder_button(self):
@@ -21,7 +26,24 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
                                                                    dir=self.default_path)
 
         if selected_directory:
+            self.__clean_lines_edit__()
             self.parentWidget().on_browse_folder(selected_directory)
+
+    def insert_metadata_tags(self, selected_paths):
+        music_file_model = self.metadata_api.get_music_files_list_metadata(selected_paths)
+
+        try:
+            music_file_model_dict = music_file_model.serialize()
+        except AttributeError:
+            return self.__clean_lines_edit__()
+
+        for key in music_file_model_dict:
+            text = music_file_model_dict[key]
+            try:
+                self.line_edits_dict[key][0].setText(text)
+                self.line_edits_dict[key][0].setEnabled(True)
+            except KeyError:
+                pass
 
     def __init_layout__(self):
         self.__create_browse_folder_button__()
@@ -72,3 +94,9 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             line_edit.setEnabled(False)
 
             metadata_box.addWidget(line_edit, *position)
+
+    def __clean_lines_edit__(self):
+        for line_edit_name in self.line_edits_dict:
+            line_edit = self.line_edits_dict[line_edit_name][0]
+            line_edit.clear()
+            line_edit.setEnabled(False)
