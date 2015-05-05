@@ -111,6 +111,8 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
     def __add_reorganize_section__(self):
         reorganize_menu = self.addMenu('&Reorganize Patterns')
         self.__add_reorganize_options__(reorganize_menu)
+        reorganize_menu.addSeparator()
+        self.__add_custom_reorganize_option__(reorganize_menu)
 
     def __add_reorganize_options__(self, reorganize_menu):
         self.patterns_options = [
@@ -125,3 +127,15 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
             pattern_option.toggled.connect(self.on_pattern_check)
 
         reorganize_menu.addActions(self.patterns_options)
+
+    def __add_custom_reorganize_option__(self, reorganize_menu):
+        custom_reorganize_action = QtGui.QAction('&Custom Reorganize Pattern', self, checkable=True)
+        custom_reorganize_action.setStatusTip('Use Custom Pattern')
+
+        custom_reorganize_function = self.parent().on_custom_reorganize
+        custom_reorganize_action.triggered.connect(custom_reorganize_function)
+        custom_reorganize_action.toggled.connect(self.on_pattern_check)
+
+        self.patterns_options.append(custom_reorganize_action)
+
+        reorganize_menu.addAction(custom_reorganize_action)
