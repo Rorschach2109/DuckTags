@@ -4,7 +4,24 @@ from DuckTagsView.DuckTagsAppStatusBar import DuckTagsAppStatusBar
 from DuckTagsView.DuckTagsAppMainWidget import DuckTagsAppMainWidget
 from Utils.DuckTagsExceptions import DuckTagsRenameException
 
+import functools
+
 from PySide import QtGui
+
+
+def show_message_with_exception(foo):
+
+    @functools.wraps(foo)
+    def wrapper(app):
+        try:
+            edited_files_number = foo(app)
+        except DuckTagsRenameException as rename_exception:
+            message = app.rename_exception_message % rename_exception.error_path
+        else:
+            message = app.edit_message % edited_files_number
+        app.on_show_status_message(message)
+
+    return wrapper
 
 
 class DuckTagsApp(QtGui.QMainWindow):
@@ -18,38 +35,29 @@ class DuckTagsApp(QtGui.QMainWindow):
         self.main_widget = DuckTagsAppMainWidget(parent=self)
 
         self.__init_ui__()
+        self.__init_messages__()
 
     def on_close(self):
         self.close()
 
+    @show_message_with_exception
     def on_uppercase(self):
-        try:
-            edited_files_number = self.main_widget.on_uppercase()
-        except DuckTagsRenameException as rename_exception:
-            message = 'Cannot Rename File %s' % rename_exception.error_path
-        else:
-            message = 'Edited %s Files' % edited_files_number
-        self.on_show_status_message(message)
+        return self.main_widget.on_uppercase()
 
     def on_save(self):
         saved_files_number = self.main_widget.on_save()
-        self.on_show_status_message('Saved %s Files' % saved_files_number)
+        self.on_show_status_message(self.save_message % saved_files_number)
 
+    @show_message_with_exception
     def on_reorganize(self):
-        try:
-            reorganized_files_number = self.main_widget.on_reorganize()
-        except DuckTagsRenameException as rename_exception:
-            message = 'Cannot Rename File %s' % rename_exception.error_path
-        else:
-            message = 'Reorganized %s Files' % reorganized_files_number
-        self.on_show_status_message(message)
+        return self.main_widget.on_reorganize()
 
     def on_select_all(self):
         files_number = self.main_widget.on_select_all()
-        self.on_show_status_message('Selected %s Files' % files_number)
+        self.on_show_status_message(self.select_message % files_number)
 
     def on_select_file(self, selected_files_number):
-        self.on_show_status_message('Selected %s Files' % selected_files_number)
+        self.on_show_status_message(self.select_message % selected_files_number)
 
     def on_select_folder(self):
         self.main_widget.on_select_folder()
@@ -59,6 +67,12 @@ class DuckTagsApp(QtGui.QMainWindow):
 
     def get_reorganize_pattern_index(self):
         return self.menuBar().get_reorganize_pattern_index()
+
+    def __init_messages__(self):
+        self.rename_exception_message = 'Cannot Rename File %s'
+        self.select_message = 'Selected %s Files'
+        self.save_message = 'Saved %s Files'
+        self.edit_message = 'Edited %s Files'
 
     def __init_ui__(self):
         self.setWindowTitle(self.app_name)
