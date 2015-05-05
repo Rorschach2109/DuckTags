@@ -10,6 +10,7 @@ class DuckTagsAppToolBar(QtGui.QToolBar):
         self.__add_save_action__()
         self.__add_reorganization_action__()
         self.__add_select_all_action__()
+        self.__add_uppercase_action__()
 
     def __add_save_action__(self):
         save_action = QtGui.QAction('Save', self.parent())
@@ -31,3 +32,10 @@ class DuckTagsAppToolBar(QtGui.QToolBar):
         select_all_action.triggered.connect(self.parent().on_select_all)
 
         self.addAction(select_all_action)
+
+    def __add_uppercase_action__(self):
+        uppercase_action = QtGui.QAction('Uppercase Tags', self.parent())
+        uppercase_action.setStatusTip('Convert Tags To Uppercase')
+        uppercase_action.triggered.connect(self.parent().on_uppercase)
+
+        self.addAction(uppercase_action)
