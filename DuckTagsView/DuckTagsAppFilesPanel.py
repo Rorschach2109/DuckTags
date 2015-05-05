@@ -40,9 +40,10 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
         self.__insert_list_items__(files_dict)
 
     def on_select_all(self):
-        self.__process_selected_roots__(self.root_items_rows_list)
-        self.on_item_selection_changed()
-        return len(self.__get_selected_rows__())
+        file_items_rows_list = list(set(range(self.count())) - set(self.root_items_rows_list))
+        for file_item_row in file_items_rows_list:
+            self.item(file_item_row).setSelected(True)
+        return len(file_items_rows_list)
 
     @item_selection_changed_connection
     def on_item_selection_changed(self):
