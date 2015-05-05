@@ -63,5 +63,7 @@ class DuckTagsFileManager(object):
 
         if file_format_pattern_index == 0 or file_format_pattern_index == 1:
             self.file_name = self.utils.file_format_patterns[file_format_pattern_index][1] % (track_number, title)
+        elif file_format_pattern_index == 2:
+            pass
 
         return True

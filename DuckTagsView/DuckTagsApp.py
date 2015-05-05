@@ -2,7 +2,7 @@ from DuckTagsView.DuckTagsAppMenuBar import DuckTagsAppMenuBar
 from DuckTagsView.DuckTagsAppToolBar import DuckTagsAppToolBar
 from DuckTagsView.DuckTagsAppStatusBar import DuckTagsAppStatusBar
 from DuckTagsView.DuckTagsAppMainWidget import DuckTagsAppMainWidget
-from DuckTagsView.DuckTagsCustomReorganizeOptionDialog import DuckTagsCustomReorganizeOptionDialog
+from DuckTagsView.DuckTagsCustomReorganizationOptionDialog import DuckTagsCustomReorganizationOptionDialog
 from Utils.DuckTagsExceptions import DuckTagsRenameException
 
 import functools
@@ -66,10 +66,13 @@ class DuckTagsApp(QtGui.QMainWindow):
     def on_show_status_message(self, message):
         self.statusBar().showMessage(message)
 
-    def on_custom_reorganize(self):
-        custom_reorganize_dialog = DuckTagsCustomReorganizeOptionDialog(parent=self)
+    def on_custom_reorganization_option(self):
+        custom_reorganize_dialog = DuckTagsCustomReorganizationOptionDialog(parent=self)
         custom_reorganize_dialog.setModal(True)
         custom_reorganize_dialog.show()
+
+    def on_custom_reorganization_decline(self):
+        self.menuBar().on_custom_reorganization_decline()
 
     def get_reorganize_pattern_index(self):
         return self.menuBar().get_reorganize_pattern_index()

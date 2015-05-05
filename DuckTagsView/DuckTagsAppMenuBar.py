@@ -7,6 +7,7 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
     def __init__(self, *args, **kwargs):
         super(DuckTagsAppMenuBar, self).__init__(*args, **kwargs)
 
+        self.previous_pattern_index = None
         self.current_pattern_index = None
 
         self.__add_file_section__()
@@ -22,8 +23,12 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
 
         for pattern_option_index in range(len(self.patterns_options)):
             if self.patterns_options[pattern_option_index].isChecked():
+                self.previous_pattern_index = self.current_pattern_index
                 self.current_pattern_index = pattern_option_index
                 break
+
+    def on_custom_reorganization_decline(self):
+        self.patterns_options[self.previous_pattern_index].setChecked(True)
 
     def get_reorganize_pattern_index(self):
         return self.current_pattern_index
@@ -122,6 +127,7 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
 
         self.patterns_options[0].setChecked(True)
         self.current_pattern_index = 0
+        self.previous_pattern_index = 0
 
         for pattern_option in self.patterns_options:
             pattern_option.toggled.connect(self.on_pattern_check)
@@ -132,7 +138,7 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
         custom_reorganize_action = QtGui.QAction('&Custom Reorganize Pattern', self, checkable=True)
         custom_reorganize_action.setStatusTip('Use Custom Pattern')
 
-        custom_reorganize_function = self.parent().on_custom_reorganize
+        custom_reorganize_function = self.parent().on_custom_reorganization_option
         custom_reorganize_action.triggered.connect(custom_reorganize_function)
         custom_reorganize_action.toggled.connect(self.on_pattern_check)
 
