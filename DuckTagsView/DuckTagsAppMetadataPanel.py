@@ -24,6 +24,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
     def on_uppercase(self):
         current_paths_length = len(self.current_paths)
+
         self.metadata_api.set_music_file_list_metadata_uppercase(self.current_paths)
         self.__reorganize_files__()
 
@@ -35,6 +36,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             music_file_model_dict[line_edit_name] = self.line_edits_dict[line_edit_name][0].text()
 
         self.metadata_api.set_music_file_list_metadata(self.current_paths, music_file_model_dict)
+        
         return len(self.current_paths)
 
     def on_reorganize(self):
@@ -73,8 +75,9 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         for key in music_file_model_dict:
             text = music_file_model_dict[key]
             try:
-                self.line_edits_dict[key][0].setText(text)
-                self.line_edits_dict[key][0].setEnabled(True)
+                line_edit = self.line_edits_dict[key][0]
+                line_edit.setText(text)
+                line_edit.setEnabled(True)
             except KeyError:
                 pass
 
