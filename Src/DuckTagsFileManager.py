@@ -12,8 +12,11 @@ class DuckTagsFileManager(object):
         self.current_folder_path = folder_path
 
         files_dict = {}
-        for (dir_path, dir_names, file_names) in os.walk(folder_path):
-            files_dict[dir_path] = file_names
+        try:
+            for (dir_path, dir_names, file_names) in os.walk(folder_path):
+                files_dict[dir_path] = file_names
+        except TypeError:
+            pass
         return files_dict
 
     def get_music_files_from_files_dict(self, files_dict, music_extensions_list):

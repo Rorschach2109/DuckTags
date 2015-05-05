@@ -39,10 +39,9 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
     def on_reorganize(self):
         if not self.current_directory:
-            return
+            return 0
 
         self.on_save()
-
         return self.__reorganize_files__()
 
     def on_browse_folder_button(self):
