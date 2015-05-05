@@ -51,10 +51,11 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         directory_dialog.setFileMode(QtGui.QFileDialog.Directory)
         directory_dialog.setOption(QtGui.QFileDialog.ShowDirsOnly)
 
-        self.current_directory = directory_dialog.getExistingDirectory(caption="Select Directory",
-                                                                       dir=self.default_path)
+        new_directory = directory_dialog.getExistingDirectory(caption="Select Directory",
+                                                              dir=self.default_path)
 
-        if self.current_directory:
+        if new_directory:
+            self.current_directory = new_directory
             self.__clean_lines_edit__()
             self.current_paths = list()
 
