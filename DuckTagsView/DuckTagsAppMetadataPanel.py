@@ -19,6 +19,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.folder_structure_api = DuckTagsFolderStructureAPI()
         self.current_paths = list()
         self.current_directory = None
+        self.file_name_line_edit = None
+        self.multiple_file_message = 'Multiple Files'
 
         self.__init_layout__()
 
@@ -36,7 +38,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             music_file_model_dict[line_edit_name] = self.line_edits_dict[line_edit_name][0].text()
 
         self.metadata_api.set_music_file_list_metadata(self.current_paths, music_file_model_dict)
-        
+
         return len(self.current_paths)
 
     def on_reorganize(self):
@@ -66,6 +68,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.current_paths = selected_paths
         music_file_model = self.metadata_api.get_music_files_list_metadata(self.current_paths)
 
+        self.__insert_file_name__()
+
         try:
             music_file_model_dict = music_file_model.serialize()
         except AttributeError:
@@ -80,6 +84,18 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
                 line_edit.setEnabled(True)
             except KeyError:
                 pass
+
+    def __insert_file_name__(self):
+        if len(self.current_paths) > 1:
+            text = self.multiple_file_message
+        elif len(self.current_paths) == 1:
+            file_path = self.current_paths[0]
+            text = os.path.basename(file_path)
+            self.file_name_line_edit.setEnabled(True)
+        else:
+            text = ''
+
+        self.file_name_line_edit.setText(text)
 
     def __init_layout__(self):
         self.__create_browse_folder_button__()
@@ -102,12 +118,13 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
     @staticmethod
     def __create_labels__(metadata_box):
         labels_dict = {
-            'title': (QtGui.QLabel('Title'), (0, 0)),
-            'artist': (QtGui.QLabel('Artist'), (1, 0)),
-            'album': (QtGui.QLabel('Album'), (2, 0)),
-            'date': (QtGui.QLabel('Date'), (3, 0)),
-            'track_number': (QtGui.QLabel('Track_number'), (4, 0)),
-            'genre': (QtGui.QLabel('Genre'), (5, 0)),
+            'file_name': (QtGui.QLabel('File Name'), (0, 0)),
+            'title': (QtGui.QLabel('Title'), (1, 0)),
+            'artist': (QtGui.QLabel('Artist'), (2, 0)),
+            'album': (QtGui.QLabel('Album'), (3, 0)),
+            'date': (QtGui.QLabel('Date'), (4, 0)),
+            'track_number': (QtGui.QLabel('Track_number'), (5, 0)),
+            'genre': (QtGui.QLabel('Genre'), (6, 0)),
             }
 
         for label in labels_dict:
@@ -115,13 +132,18 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
     def __create_lines_edit__(self, metadata_box):
         self.line_edits_dict = {
-            'title': (QtGui.QLineEdit(), (0, 1)),
-            'artist': (QtGui.QLineEdit(), (1, 1)),
-            'album': (QtGui.QLineEdit(), (2, 1)),
-            'date': (QtGui.QLineEdit(), (3, 1)),
-            'tracknumber': (QtGui.QLineEdit(), (4, 1)),
-            'genre': (QtGui.QLineEdit(), (5, 1)),
+            'title': (QtGui.QLineEdit(), (1, 1)),
+            'artist': (QtGui.QLineEdit(), (2, 1)),
+            'album': (QtGui.QLineEdit(), (3, 1)),
+            'date': (QtGui.QLineEdit(), (4, 1)),
+            'tracknumber': (QtGui.QLineEdit(), (5, 1)),
+            'genre': (QtGui.QLineEdit(), (6, 1)),
         }
+
+        self.file_name_line_edit = QtGui.QLineEdit()
+        self.file_name_line_edit.setReadOnly(True)
+        self.file_name_line_edit.setEnabled(False)
+        metadata_box.addWidget(self.file_name_line_edit, *(0, 1))
 
         metadata_box.addWidget(self.line_edits_dict['title'][0], *self.line_edits_dict['title'][1])
         metadata_box.addWidget(self.line_edits_dict['artist'][0], *self.line_edits_dict['artist'][1])
@@ -150,6 +172,9 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             line_edit = self.line_edits_dict[line_edit_name][0]
             line_edit.clear()
             line_edit.setEnabled(False)
+
+        self.file_name_line_edit.clear()
+        self.file_name_line_edit.setEnabled(False)
 
     def __reorganize_files__(self):
         reorganize_pattern_index = self.parentWidget().get_reorganize_pattern_index()
