@@ -112,10 +112,10 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
         self.__add_reorganize_options__(reorganize_menu)
 
     def __add_reorganize_options__(self, reorganize_menu):
-        first_pattern = QtGui.QAction(DuckTagsUtils.file_format_patterns[0][0], self, checkable=True)
-        second_pattern = QtGui.QAction(DuckTagsUtils.file_format_patterns[1][0], self, checkable=True)
-
-        self.patterns_options = [first_pattern, second_pattern]
+        self.patterns_options = [
+            QtGui.QAction(DuckTagsUtils.file_format_patterns[pattern_index][0], self, checkable=True)
+            for pattern_index in range(len(DuckTagsUtils.file_format_patterns))
+        ]
 
         self.patterns_options[0].setChecked(True)
         self.current_pattern_index = 0
