@@ -14,17 +14,11 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
         self.__add_reorganize_section__()
 
     def on_pattern_check(self, checked):
-        current_pattern = self.patterns_options[self.current_pattern_index]
-
         if not checked:
-            current_pattern.toggled.disconnect(self.on_pattern_check)
-            current_pattern.setChecked(True)
-            current_pattern.toggled.connect(self.on_pattern_check)
+            self.__set_current_pattern_checked__(True)
             return
 
-        current_pattern.toggled.disconnect(self.on_pattern_check)
-        current_pattern.setChecked(False)
-        current_pattern.toggled.connect(self.on_pattern_check)
+        self.__set_current_pattern_checked__(False)
 
         for pattern_option_index in range(len(self.patterns_options)):
             if self.patterns_options[pattern_option_index].isChecked():
@@ -33,6 +27,13 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
 
     def get_reorganize_pattern_index(self):
         return self.current_pattern_index
+
+    def __set_current_pattern_checked__(self, checked):
+        current_pattern = self.patterns_options[self.current_pattern_index]
+
+        current_pattern.toggled.disconnect(self.on_pattern_check)
+        current_pattern.setChecked(checked)
+        current_pattern.toggled.connect(self.on_pattern_check)
 
     def __add_file_section__(self):
         file_menu = self.addMenu('&File')
