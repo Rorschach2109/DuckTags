@@ -59,12 +59,13 @@ class DuckTagsAppFilesPanel(QtGui.QListWidget):
 
     @item_selection_changed_connection
     def keyPressEvent(self, event):
+        super(DuckTagsAppFilesPanel, self).keyPressEvent(event)
+
         key_id = event.key()
         if key_id == QtCore.Qt.Key_Down or key_id == QtCore.Qt.Key_Up \
                 or key_id == QtCore.Qt.Key_Control or key_id == QtCore.Qt.SHIFT or key_id == QtCore.Qt.Key_A:
             self.on_item_selection_changed()
         else:
-            super(DuckTagsAppFilesPanel, self).keyPressEvent(event)
             self.itemSelectionChanged.connect(self.on_item_selection_changed)
 
     def __process_selected_roots__(self, selected_rows):
