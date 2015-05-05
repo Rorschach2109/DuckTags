@@ -13,6 +13,9 @@ class DuckTagsAppMainWidget(QtGui.QWidget):
     def on_browse_folder(self, selected_directory):
         self.files_panel.on_browse_folder(selected_directory)
 
+    def on_uppercase(self):
+        return self.metadata_panel.on_uppercase()
+
     def on_save(self):
         return self.metadata_panel.on_save()
 

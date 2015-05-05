@@ -73,8 +73,19 @@ class DuckTagsAppMenuBar(QtGui.QMenuBar):
 
     def __add_edit_section__(self):
         edit_menu = self.addMenu('&Edit')
+        self.__add_uppercase_action__(edit_menu)
         self.__add_save_action__(edit_menu)
         self.__add_reorganize_action__(edit_menu)
+
+    def __add_uppercase_action__(self, edit_menu):
+        uppercase_action = QtGui.QAction('&Uppercase Tags', self)
+        uppercase_action.setShortcut('Ctrl+U')
+        uppercase_action.setStatusTip('Convert Tags To Uppercase')
+
+        uppercase_function = self.parent().on_uppercase
+        uppercase_action.triggered.connect(uppercase_function)
+
+        edit_menu.addAction(uppercase_action)
 
     def __add_save_action__(self, edit_menu):
         save_action = QtGui.QAction('&Save', self)

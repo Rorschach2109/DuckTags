@@ -22,6 +22,15 @@ class DuckTagsApp(QtGui.QMainWindow):
     def on_close(self):
         self.close()
 
+    def on_uppercase(self):
+        try:
+            edited_files_number = self.main_widget.on_uppercase()
+        except DuckTagsRenameException as rename_exception:
+            message = 'Cannot Rename File %s' % rename_exception.error_path
+        else:
+            message = 'Edited %s Files' % edited_files_number
+        self.on_show_status_message(message)
+
     def on_save(self):
         saved_files_number = self.main_widget.on_save()
         self.on_show_status_message('Saved %s Files' % saved_files_number)
@@ -30,7 +39,7 @@ class DuckTagsApp(QtGui.QMainWindow):
         try:
             reorganized_files_number = self.main_widget.on_reorganize()
         except DuckTagsRenameException as rename_exception:
-            message = 'Cannot rename File %s' % rename_exception.error_path
+            message = 'Cannot Rename File %s' % rename_exception.error_path
         else:
             message = 'Reorganized %s Files' % reorganized_files_number
         self.on_show_status_message(message)

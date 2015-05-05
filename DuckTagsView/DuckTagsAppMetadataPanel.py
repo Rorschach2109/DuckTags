@@ -22,6 +22,13 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
         self.__init_layout__()
 
+    def on_uppercase(self):
+        current_paths_length = len(self.current_paths)
+        self.metadata_api.set_music_file_list_metadata_uppercase(self.current_paths)
+        self.__reorganize_files__()
+
+        return current_paths_length
+
     def on_save(self):
         music_file_model_dict = dict()
         for line_edit_name in self.line_edits_dict:
@@ -36,17 +43,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
         self.on_save()
 
-        reorganize_pattern_index = self.parentWidget().get_reorganize_pattern_index()
-        try:
-            self.folder_structure_api.reorganize_files_with_pattern(self.current_paths, reorganize_pattern_index)
-        except DuckTagsRenameException:
-            raise
-        else:
-            reorganized_files_number = len(self.current_paths)
-            self.__clean_lines_edit__()
-            self.parentWidget().on_browse_folder(self.current_directory)
-
-        return reorganized_files_number
+        return self.__reorganize_files__()
 
     def on_browse_folder_button(self):
         directory_dialog = QtGui.QFileDialog()
@@ -150,3 +147,18 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             line_edit = self.line_edits_dict[line_edit_name][0]
             line_edit.clear()
             line_edit.setEnabled(False)
+
+    def __reorganize_files__(self):
+        reorganize_pattern_index = self.parentWidget().get_reorganize_pattern_index()
+
+        try:
+            self.folder_structure_api.reorganize_files_with_pattern(self.current_paths, reorganize_pattern_index)
+        except DuckTagsRenameException:
+            raise
+        else:
+            reorganized_files_number = len(self.current_paths)
+            self.__clean_lines_edit__()
+            self.parentWidget().on_browse_folder(self.current_directory)
+
+        return reorganized_files_number
+

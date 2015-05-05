@@ -32,6 +32,10 @@ class DuckTagsMp3MetadataManager(object):
 
         self.audio[tag_name] = tag_value
 
+    @staticmethod
+    def __do_uppercase_tag_value__(tag_value):
+        return ''.join([x[:1].upper() + x[1:].lower() + ' ' for x in tag_value.split(' ')]).rstrip()
+
     def get_music_file_metadata(self, music_file_path):
         try:
             self.audio = EasyID3(music_file_path)
@@ -105,3 +109,21 @@ class DuckTagsMp3MetadataManager(object):
     def set_music_file_list_metadata(self, music_files_paths_list, music_metadata_dict):
         for music_file_path in music_files_paths_list:
             self.set_music_file_metadata(music_file_path, music_metadata_dict)
+
+    def set_music_file_metadata_uppercase(self, music_file_path):
+        try:
+            self.audio = EasyID3(music_file_path)
+        except Exception:
+            pass
+        else:
+            for tag_name in [self.title_tag, self.artist_tag, self.album_tag, self.genre_tag]:
+                tag_value = self.__get_metadata_field__(tag_name)
+                uppercase_tag_value = self.__do_uppercase_tag_value__(tag_value)
+                self.audio[tag_name] = uppercase_tag_value
+
+            self.audio.save()
+            self.audio = None
+
+    def set_music_file_list_metadata_uppercase(self, music_files_paths_list):
+        for music_file_path in music_files_paths_list:
+            self.set_music_file_metadata_uppercase(music_file_path)
