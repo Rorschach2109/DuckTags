@@ -78,6 +78,7 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             music_file_model_dict = music_file_model.serialize()
         except AttributeError:
             self.__clean_lines_edit__()
+            self.cover_button.clean_button_image()
             return
 
         for key in music_file_model_dict:
@@ -88,6 +89,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
                 line_edit.setEnabled(True)
             except KeyError:
                 pass
+
+        self.cover_button.setEnabled(True)
 
     def __insert_file_name__(self):
         if len(self.current_paths) > 1:

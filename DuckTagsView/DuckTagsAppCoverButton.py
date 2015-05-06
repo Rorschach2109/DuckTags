@@ -1,3 +1,5 @@
+import os
+
 from PySide import QtGui
 from PySide import QtCore
 
@@ -7,10 +9,20 @@ class DuckTagsAppCoverButton(QtGui.QAbstractButton):
         super(DuckTagsAppCoverButton, self).__init__()
 
         self.no_cover_image_path = ''
-        self.cover_image_path = str()
+        self._cover_image_path = str()
         self.button_size = cover_button_size
 
+        self.setEnabled(False)
         self.clicked.connect(self.on_click)
+
+    @property
+    def cover_image_path(self):
+        return self._cover_image_path
+
+    @cover_image_path.setter
+    def cover_image_path(self, new_path):
+        self._cover_image_path = new_path
+        self.update()
 
     def paintEvent(self, event):
         painter = QtGui.QPainter(self)
@@ -22,4 +34,17 @@ class DuckTagsAppCoverButton(QtGui.QAbstractButton):
         return QtCore.QSize(*self.button_size)
 
     def on_click(self):
-        pass
+        file_dialog = QtGui.QFileDialog()
+        file_dialog.setFileMode(QtGui.QFileDialog.ExistingFile)
+        file_dialog.setReadOnly(True)
+
+        cover_filter = '*.png;;*.jpg'
+
+        cover_file_path = file_dialog.getOpenFileName(caption="Select File", dir=os.getcwd(), filter=cover_filter)
+
+        if cover_file_path[0]:
+            self.cover_image_path = cover_file_path[0]
+
+    def clean_button_image(self):
+        self.cover_image_path = ''
+        self.setEnabled(False)
