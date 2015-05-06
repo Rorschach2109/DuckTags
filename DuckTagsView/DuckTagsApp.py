@@ -67,9 +67,7 @@ class DuckTagsApp(QtGui.QMainWindow):
         self.statusBar().showMessage(message)
 
     def on_custom_reorganization_option(self):
-        custom_reorganize_dialog = DuckTagsCustomReorganizationOptionDialog(parent=self)
-        custom_reorganize_dialog.setModal(True)
-        custom_reorganize_dialog.show()
+        self.custom_reorganization_dialog.show()
 
     def on_custom_reorganization_decline(self):
         self.menuBar().on_custom_reorganization_decline()
@@ -90,6 +88,7 @@ class DuckTagsApp(QtGui.QMainWindow):
         self.resize(*self.min_size)
         self.__center_window__()
         self.__add_bars__()
+        self.__create_custom_reorganization_dialog__()
 
         self.setCentralWidget(self.main_widget)
 
@@ -111,6 +110,10 @@ class DuckTagsApp(QtGui.QMainWindow):
 
         status_bar = DuckTagsAppStatusBar(parent=self)
         self.setStatusBar(status_bar)
+
+    def __create_custom_reorganization_dialog__(self):
+        self.custom_reorganization_dialog = DuckTagsCustomReorganizationOptionDialog(parent=self)
+        self.custom_reorganization_dialog.setModal(True)
 
     @staticmethod
     def __compute_app_size__():

@@ -63,7 +63,15 @@ class DuckTagsFileManager(object):
 
         if file_format_pattern_index == 0 or file_format_pattern_index == 1:
             self.file_name = self.utils.file_format_patterns[file_format_pattern_index][1] % (track_number, title)
+
         elif file_format_pattern_index == 2:
-            pass
+            file_data_list = list()
+            music_file_model_dict = music_file_model.serialize()
+
+            for file_data_name in self.utils.file_format_patterns[file_format_pattern_index][1]:
+                file_data_value = music_file_model_dict.get(file_data_name)
+                file_data_list.append(file_data_value)
+
+            self.file_name = self.utils.file_format_patterns[file_format_pattern_index][0] % tuple(file_data_list)
 
         return True

@@ -178,7 +178,6 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
     def __reorganize_files__(self):
         reorganize_pattern_index = self.parentWidget().get_reorganize_pattern_index()
-        print reorganize_pattern_index
         try:
             self.folder_structure_api.reorganize_files_with_pattern(self.current_paths, reorganize_pattern_index)
         except DuckTagsRenameException:
