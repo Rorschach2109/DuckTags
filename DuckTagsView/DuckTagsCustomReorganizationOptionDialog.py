@@ -9,6 +9,8 @@ class DuckTagsCustomReorganizationOptionDialog(QtGui.QDialog):
         self.dialog_name = 'Custom Reorganization Option'
         self.__init_ui__()
 
+        self.rejected.connect(self.on_decline)
+
     def on_confirm(self):
         custom_pattern = self.custom_pattern_input.text()
 
