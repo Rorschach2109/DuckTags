@@ -8,6 +8,8 @@ class DuckTagsAppMainWidget(QtGui.QWidget):
     def __init__(self, *args, **kwargs):
         super(DuckTagsAppMainWidget, self).__init__(*args, **kwargs)
 
+        self.metadata_panel_stretch = 5
+        self.files_panel_stretch = 7
         self.__init_layout__()
 
     def on_browse_folder(self, selected_directory):
@@ -38,10 +40,10 @@ class DuckTagsAppMainWidget(QtGui.QWidget):
     def __init_layout__(self):
         main_box = QtGui.QHBoxLayout()
 
-        self.metadata_panel = DuckTagsAppMetadataPanel()
-        main_box.addLayout(self.metadata_panel, stretch=5)
+        self.metadata_panel = DuckTagsAppMetadataPanel(self)
+        main_box.addLayout(self.metadata_panel, stretch=self.metadata_panel_stretch)
 
         self.files_panel = DuckTagsAppFilesPanel()
-        main_box.addWidget(self.files_panel, stretch=7)
+        main_box.addWidget(self.files_panel, stretch=self.files_panel_stretch)
 
         self.setLayout(main_box)

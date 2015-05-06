@@ -1,3 +1,5 @@
+from DuckTagsView.DuckTagsAppCoverButton import DuckTagsAppCoverButton
+
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
 from DuckTags_API.DuckTagsFolderStructureAPI import DuckTagsFolderStructureAPI
 from Utils.DuckTagsExceptions import DuckTagsRenameException
@@ -9,8 +11,8 @@ import os
 
 
 class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
-    def __init__(self, *args, **kwargs):
-        super(DuckTagsAppMetadataPanel, self).__init__(*args, **kwargs)
+    def __init__(self, main_window):
+        super(DuckTagsAppMetadataPanel, self).__init__()
 
         self.Direction = QtGui.QBoxLayout.TopToBottom
         self.default_path = os.path.expanduser('~')
@@ -21,6 +23,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.current_directory = None
         self.file_name_line_edit = None
         self.multiple_file_message = 'Multiple Files'
+
+        self.main_window = main_window
 
         self.__init_layout__()
 
@@ -112,8 +116,31 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         self.__create_labels__(metadata_box)
         self.__create_lines_edit__(metadata_box)
 
-        self.addLayout(metadata_box, stretch=1)
-        self.addStretch(2)
+        self.addLayout(metadata_box)
+        self.__create_cover_button__()
+
+    def __create_cover_button__(self):
+        cover_button_size = self.__compute_cover_button_size__()
+        cover_button_layout = QtGui.QGridLayout()
+        cover_button_layout.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.cover_button = DuckTagsAppCoverButton(cover_button_size)
+        cover_button_layout.addWidget(self.cover_button, 0, 0)
+
+        self.addLayout(cover_button_layout)
+
+    def __compute_cover_button_size__(self):
+        stretch_sum = self.main_window.metadata_panel_stretch + self.main_window.files_panel_stretch
+        main_window_size = self.main_window.parent().size()
+
+        metadata_panel_width = main_window_size.width() * self.main_window.metadata_panel_stretch / stretch_sum
+        metadata_panel_height = main_window_size.height()
+
+        cover_button_height = metadata_panel_height - 8 * 45
+        if cover_button_height < metadata_panel_height:
+            return cover_button_height, cover_button_height
+        else:
+            return metadata_panel_width, metadata_panel_width
 
     @staticmethod
     def __create_labels__(metadata_box):

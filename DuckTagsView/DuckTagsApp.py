@@ -30,8 +30,11 @@ class DuckTagsApp(QtGui.QMainWindow):
         super(DuckTagsApp, self).__init__()
 
         self.min_size = self.__compute_app_size__()
+        self.max_size = tuple(map(lambda x: x * 1.15, self.min_size))
         self.app_name = 'DuckTags'
         self.icon_path = ''
+
+        self.__set_size__()
 
         self.main_widget = DuckTagsAppMainWidget(parent=self)
 
@@ -81,11 +84,15 @@ class DuckTagsApp(QtGui.QMainWindow):
         self.save_message = 'Saved %s Files'
         self.edit_message = 'Edited %s Files'
 
+    def __set_size__(self):
+        self.resize(*self.min_size)
+        self.setMinimumSize(*self.min_size)
+        self.setMaximumSize(*self.max_size)
+
     def __init_ui__(self):
         self.setWindowTitle(self.app_name)
         self.setWindowIcon(QtGui.QIcon(self.icon_path))
 
-        self.resize(*self.min_size)
         self.__center_window__()
         self.__add_bars__()
         self.__create_custom_reorganization_dialog__()
