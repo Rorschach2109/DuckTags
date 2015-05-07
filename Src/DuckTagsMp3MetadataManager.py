@@ -153,16 +153,13 @@ class DuckTagsMp3MetadataManager(object):
         try:
             cover_directory = self.__load_cover_from_directory__(music_files_paths_list)
         except DuckTagsMultipleCoverDirectories:
-            print 'DuckTagsMultipleCoverDirectories raised'
             return str()
         except IndexError:
-            print 'IndexError'
             return self.__load_cover_from_tags__(music_files_paths_list)
         else:
             return cover_directory
 
     def __load_cover_from_directory__(self, music_files_paths_list):
-        print 'load_cover_from_directory'
         music_files_directories = set([file_path[:file_path.rfind('/')] for file_path in music_files_paths_list])
 
         if len(music_files_directories) == 1:
@@ -181,7 +178,6 @@ class DuckTagsMp3MetadataManager(object):
         )
 
     def __load_cover_from_tags__(self, music_files_paths_list):
-        print 'load_cover_from_tags'
         cover_file_path = str()
 
         directory_path = self.__get_directory_path_from_music_file_path__(music_files_paths_list[0])
@@ -237,7 +233,6 @@ class DuckTagsMp3MetadataManager(object):
 
     def __set_music_file_list_cover__(self, music_files_paths_list, cover_path):
         destination_directory_path_list = self.__get_directory_path_from_music_files_path_list__(music_files_paths_list)
-        print destination_directory_path_list
 
         for destination_directory_path in destination_directory_path_list:
 
@@ -277,7 +272,6 @@ class DuckTagsMp3MetadataManager(object):
         return music_directories_list
 
     def __remove_old_image_files__(self, destination_directory_path):
-        print '__remove__'
         images_files_list = filter(
             lambda file_name:
             file_name.endswith(self.png_file_extension) or file_name.endswith(self.jpg_file_extension),
@@ -287,5 +281,4 @@ class DuckTagsMp3MetadataManager(object):
         for image_file_path in map(
                 lambda file_name: '/'.join([destination_directory_path, file_name]), images_files_list
         ):
-            print 'removing:', image_file_path
             os.remove(image_file_path)
