@@ -19,6 +19,11 @@ class DuckTagsMp3MetadataManager(object):
         self.genre_tag = u'genre'
         self.date_tag = u'date'
         self.track_number_tag = u'tracknumber'
+        self.cover_tag = u'APIC:'
+
+        self.cover_file_name = u'Cover'
+        self.png_file_extension = u'png'
+        self.jpg_file_extension = u'jpg'
 
     def __get_metadata_field__(self, metadata_field_name):
         try:
@@ -141,20 +146,50 @@ class DuckTagsMp3MetadataManager(object):
         except DuckTagsMultipleCoverDirectories:
             return str()
         except IndexError:
-            pass
+            return self.__load_cover_from_tags__(music_files_paths_list)
 
     def __load_cover_from_directory__(self, music_files_paths_list):
         music_files_directories = set([file_path[:file_path.rfind('/')] for file_path in music_files_paths_list])
 
         if len(music_files_directories) == 1:
             directory_path = music_files_directories.pop()
-            directory_images_list = self.__get_directory_images_list__()
+            directory_images_list = self.__get_directory_images_list__(directory_path)
 
             return '/'.join([directory_path, directory_images_list[0]])
         else:
             raise DuckTagsMultipleCoverDirectories
 
-    @staticmethod
-    def __get_directory_images_list__(directory_path):
-        return filter(lambda file_path: file_path.endswith('.jpg') or file_path.endswith('.png'),
-                      os.listdir(directory_path))
+    def __get_directory_images_list__(self, directory_path):
+        return filter(
+            lambda file_path:
+            file_path.endswith(self.jpg_file_extension) or file_path.endswith(self.png_file_extension),
+            os.listdir(directory_path)
+        )
+
+    def __load_cover_from_tags__(self, music_files_paths_list):
+        cover_file_path = str()
+
+        directory_path = music_files_paths_list[0][:music_files_paths_list[0].rfind('/')]
+        for music_file_path in music_files_paths_list:
+            try:
+                self.audio = MP3(music_file_path)
+            except Exception:
+                continue
+
+            if self.cover_tag in self.audio:
+                if self.png_file_extension.upper() in self.audio[self.cover_tag].data[:10]:
+                    cover_extension = self.png_file_extension
+                else:
+                    cover_extension = self.jpg_file_extension
+
+                cover_file_name = '.'.join([self.cover_file_name, cover_extension])
+                cover_file_path = '/'.join([directory_path, cover_file_name])
+
+                cover_file = open(cover_file_path, 'wb')
+                cover_file.write(self.audio[self.cover_tag].data)
+                cover_file.close()
+
+                break
+
+        self.audio = None
+        return cover_file_path

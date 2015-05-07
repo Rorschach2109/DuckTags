@@ -21,8 +21,9 @@ class DuckTagsAppCoverButton(QtGui.QAbstractButton):
 
     @cover_image_path.setter
     def cover_image_path(self, new_path):
-        self._cover_image_path = new_path
-        self.update()
+        if new_path != self.cover_image_path:
+            self._cover_image_path = new_path
+            self.update()
 
     def paintEvent(self, event):
         painter = QtGui.QPainter(self)
