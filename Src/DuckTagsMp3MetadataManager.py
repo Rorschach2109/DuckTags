@@ -1,6 +1,10 @@
 from Src.DuckTagsDatabaseTools.DuckTagsMusicFileModel import DuckTagsMusicFileModel
+from Utils.DuckTagsExceptions import DuckTagsMultipleCoverDirectories
 
 from mutagen.easyid3 import EasyID3
+from mutagen.mp3 import MP3
+
+import os
 
 
 class DuckTagsMp3MetadataManager(object):
@@ -127,3 +131,30 @@ class DuckTagsMp3MetadataManager(object):
     def set_music_file_list_metadata_uppercase(self, music_files_paths_list):
         for music_file_path in music_files_paths_list:
             self.set_music_file_metadata_uppercase(music_file_path)
+
+    def get_music_file_cover(self, music_file_path):
+        pass
+
+    def get_music_files_list_cover(self, music_files_paths_list):
+        try:
+            return self.__load_cover_from_directory__(music_files_paths_list)
+        except DuckTagsMultipleCoverDirectories:
+            return str()
+        except IndexError:
+            pass
+
+    def __load_cover_from_directory__(self, music_files_paths_list):
+        music_files_directories = set([file_path[:file_path.rfind('/')] for file_path in music_files_paths_list])
+
+        if len(music_files_directories) == 1:
+            directory_path = music_files_directories.pop()
+            directory_images_list = self.__get_directory_images_list__()
+
+            return '/'.join([directory_path, directory_images_list[0]])
+        else:
+            raise DuckTagsMultipleCoverDirectories
+
+    @staticmethod
+    def __get_directory_images_list__(directory_path):
+        return filter(lambda file_path: file_path.endswith('.jpg') or file_path.endswith('.png'),
+                      os.listdir(directory_path))

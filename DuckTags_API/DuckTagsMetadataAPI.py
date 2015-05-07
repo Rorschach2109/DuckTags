@@ -22,3 +22,6 @@ class DuckTagsMetadataAPI(object):
 
     def set_music_file_list_metadata_uppercase(self, music_files_paths_list):
         return self.metadata_manager.set_music_file_list_metadata_uppercase(music_files_paths_list)
+
+    def get_music_files_list_cover(self, music_files_paths_list):
+        return self.metadata_manager.get_music_files_list_cover(music_files_paths_list)

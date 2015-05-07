@@ -90,7 +90,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
             except KeyError:
                 pass
 
-        self.cover_button.setEnabled(True)
+        cover_path = self.metadata_api.get_music_files_list_cover(selected_paths)
+        self.cover_button.draw_cover(cover_path)
 
     def __insert_file_name__(self):
         if len(self.current_paths) > 1:
