@@ -3,6 +3,7 @@ from DuckTagsView.DuckTagsAppCoverButton import DuckTagsAppCoverButton
 from DuckTags_API.DuckTagsMetadataAPI import DuckTagsMetadataAPI
 from DuckTags_API.DuckTagsFolderStructureAPI import DuckTagsFolderStructureAPI
 from Utils.DuckTagsExceptions import DuckTagsRenameException
+from Utils.DuckTagsExceptions import DuckTagsCorruptedMusicFile
 
 from PySide import QtGui
 from PySide import QtCore
@@ -71,7 +72,10 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
 
     def insert_metadata_tags(self, selected_paths):
         self.current_paths = selected_paths
-        music_file_model = self.metadata_api.get_music_files_list_metadata(self.current_paths)
+        try:
+            music_file_model = self.metadata_api.get_music_files_list_metadata(self.current_paths)
+        except DuckTagsCorruptedMusicFile:
+            return
 
         self.__insert_file_name__()
 

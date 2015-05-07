@@ -5,3 +5,7 @@ class DuckTagsRenameException(Exception):
 
 class DuckTagsMultipleCoverDirectories(Exception):
     pass
+
+
+class DuckTagsCorruptedMusicFile(Exception):
+    pass

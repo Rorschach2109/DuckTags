@@ -1,5 +1,6 @@
 from Src.DuckTagsDatabaseTools.DuckTagsMusicFileModel import DuckTagsMusicFileModel
 from Utils.DuckTagsExceptions import DuckTagsMultipleCoverDirectories
+from Utils.DuckTagsExceptions import DuckTagsCorruptedMusicFile
 
 from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
@@ -56,7 +57,7 @@ class DuckTagsMp3MetadataManager(object):
         try:
             self.audio = EasyID3(music_file_path)
         except Exception:
-            pass
+            raise DuckTagsCorruptedMusicFile
         else:
             metadata_tags[self.title_tag] = self.__get_metadata_field__(self.title_tag)
             metadata_tags[self.artist_tag] = self.__get_metadata_field__(self.artist_tag)
@@ -112,7 +113,7 @@ class DuckTagsMp3MetadataManager(object):
         try:
             self.audio = EasyID3(music_file_path)
         except Exception:
-            pass
+            raise DuckTagsCorruptedMusicFile
         else:
             for tag_name in [self.title_tag, self.artist_tag, self.album_tag,
                              self.date_tag, self.track_number_tag, self.genre_tag]:
@@ -134,7 +135,7 @@ class DuckTagsMp3MetadataManager(object):
         try:
             self.audio = EasyID3(music_file_path)
         except Exception:
-            pass
+            raise DuckTagsCorruptedMusicFile
         else:
             for tag_name in [self.title_tag, self.artist_tag, self.album_tag, self.genre_tag]:
                 tag_value = self.__get_metadata_field__(tag_name)
