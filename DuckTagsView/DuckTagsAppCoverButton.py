@@ -14,6 +14,7 @@ class DuckTagsAppCoverButton(QtGui.QAbstractButton):
 
         self.setEnabled(False)
         self.clicked.connect(self.on_click)
+        self.cover_changed = False
 
     @property
     def cover_image_path(self):
@@ -44,11 +45,13 @@ class DuckTagsAppCoverButton(QtGui.QAbstractButton):
         cover_file_path = file_dialog.getOpenFileName(caption="Select File", dir=os.getcwd(), filter=cover_filter)
 
         if cover_file_path[0]:
+            self.cover_changed = True
             self.cover_image_path = cover_file_path[0]
 
     def draw_cover(self, cover_path):
         self.setEnabled(True)
         self.cover_image_path = cover_path
+        self.cover_changed = False
 
     def clean_button_image(self):
         self.cover_image_path = ''

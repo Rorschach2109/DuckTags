@@ -41,7 +41,8 @@ class DuckTagsAppMetadataPanel(QtGui.QVBoxLayout):
         for line_edit_name in self.line_edits_dict:
             music_file_model_dict[line_edit_name] = self.line_edits_dict[line_edit_name][0].text()
 
-        self.metadata_api.set_music_file_list_metadata(self.current_paths, music_file_model_dict)
+        cover_path = self.cover_button.cover_image_path if self.cover_button.cover_changed else ''
+        self.metadata_api.set_music_file_list_metadata(self.current_paths, music_file_model_dict, cover_path)
 
         return len(self.current_paths)
 
