@@ -14,9 +14,8 @@ class DuckTagsMetadataAPI(object):
     def set_music_file_metadata(self, music_file_path, music_metadata_dict, cover_path):
         return self.metadata_manager.set_music_file_metadata(music_file_path, music_metadata_dict, cover_path)
 
-    def set_music_file_list_metadata(self, music_files_paths_list, music_metadata_dict, cover_path):
-        return self.metadata_manager.set_music_file_list_metadata(music_files_paths_list, music_metadata_dict,
-                                                                  cover_path)
+    def set_music_file_list_metadata(self, music_files_paths_list, music_metadata_dict):
+        return self.metadata_manager.set_music_file_list_metadata(music_files_paths_list, music_metadata_dict)
 
     def set_music_file_metadata_uppercase(self, music_file_path):
         return self.metadata_manager.set_music_file_metadata_uppercase(music_file_path)

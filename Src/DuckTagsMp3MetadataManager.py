@@ -108,7 +108,7 @@ class DuckTagsMp3MetadataManager(object):
 
         return DuckTagsMusicFileModel(self.multiple_values_message, metadata_tags)
 
-    def set_music_file_metadata(self, music_file_path, music_metadata_dict, cover_path):
+    def set_music_file_metadata(self, music_file_path, music_metadata_dict):
         try:
             self.audio = EasyID3(music_file_path)
         except Exception:
@@ -125,7 +125,7 @@ class DuckTagsMp3MetadataManager(object):
 
     def set_music_file_list_metadata(self, music_files_paths_list, music_metadata_dict, cover_path):
         for music_file_path in music_files_paths_list:
-            self.set_music_file_metadata(music_file_path, music_metadata_dict, cover_path)
+            self.set_music_file_metadata(music_file_path, music_metadata_dict)
 
         if cover_path:
             self.__set_music_file_list_cover__(music_files_paths_list, cover_path)
